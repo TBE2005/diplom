@@ -16,7 +16,15 @@ export async function GET(request: NextRequest) {
     try {
         const responseToken = await fetch(`https://yoomoney.ru/oauth/token?grant_type=authorization_code&code=${code}&client_id=${clientId}&client_secret=${clientSecret}`)
         const data = await responseToken.json();
-        const user = await fetchQuery(api.user.getByAccount, { account: data.account });
+
+        const responseAccount = await fetch(`https://yoomoney.ru/api/account-info`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`
+            }
+        })
+        const account = await responseAccount.json();
+        const user = await fetchQuery(api.user.getByAccount, { account: account.account });
         const response = NextResponse.redirect(new URL("/dashboard", request.url))
         if (!user) {
             const userId = await fetchMutation(api.user.create, { account: data.account, balance: data.balance });
