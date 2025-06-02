@@ -7,6 +7,7 @@ import { Doc, Id } from "../../../../convex/_generated/dataModel";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect } from "react";
 import { AlertTemplate } from "@/components/alert-template";
+import { notifications } from '@mantine/notifications';
 export default function Page() {
     const alerts = useQuery(api.alert.get);
     const createAlert = useMutation(api.alert.create);
@@ -37,22 +38,38 @@ function AlertCard(initialValues: Doc<"alerts">) {
     const [debouncedValues] = useDebouncedValue(form.values, 500);
 
     useEffect(() => {
-        if (
-            debouncedValues.name !== initialValues.name ||
-            debouncedValues.backgroundColor !== initialValues.backgroundColor ||
-            debouncedValues.textColor !== initialValues.textColor
-        ) {
-            updateAlert({
-                id: initialValues._id,
-                name: debouncedValues.name,
-                backgroundColor: debouncedValues.backgroundColor,
-                textColor: debouncedValues.textColor,
-                userId: localStorage.getItem("user_id") as Id<"users">
-            });
+        async function update() {
+            if (
+                debouncedValues.name !== initialValues.name ||
+                debouncedValues.backgroundColor !== initialValues.backgroundColor ||
+                debouncedValues.textColor !== initialValues.textColor
+            ) {
+                try {
+                    await updateAlert({
+                        id: initialValues._id,
+                        name: debouncedValues.name,
+                        backgroundColor: debouncedValues.backgroundColor,
+                        textColor: debouncedValues.textColor,
+                        userId: localStorage.getItem("user_id") as Id<"users">
+                    });
+                    notifications.show({
+                        title: "Оповещение обновлено",
+                        message: "Оповещение обновлено успешно",
+                        color: "green"
+                    });
+                } catch (error) {
+                    notifications.show({
+                        title: "Ошибка",
+                        message: "Ошибка при обновлении оповещения",
+                        color: "red"
+                    });
+                }
+            }
         }
+        update();
     }, [
-        debouncedValues, 
-        initialValues._id, 
+        debouncedValues,
+        initialValues._id,
         initialValues.name,
         initialValues.backgroundColor,
         initialValues.textColor,

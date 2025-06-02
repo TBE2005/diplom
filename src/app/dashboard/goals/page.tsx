@@ -7,6 +7,7 @@ import { Doc, Id } from "../../../../convex/_generated/dataModel";
 import { useEffect } from "react";
 import { useDebouncedValue } from "@mantine/hooks";
 import { GoalTemplate } from "@/components/goal-template";
+import { notifications } from '@mantine/notifications';
 export default function Page() {
     const goals = useQuery(api.goal.get);
     const createGoal = useMutation(api.goal.create);
@@ -31,28 +32,45 @@ function GoalCard(initialValues: Doc<"goals">) {
         mode: 'uncontrolled',
         initialValues,
     });
+
     const updateGoal = useMutation(api.goal.update);
     const deleteGoal = useMutation(api.goal.remove);
     const [debouncedValues] = useDebouncedValue(form.values, 500);
     useEffect(() => {
-        if (
-            debouncedValues.name !== initialValues.name ||
-            debouncedValues.backgroundColor !== initialValues.backgroundColor ||
-            debouncedValues.textColor !== initialValues.textColor ||
-            debouncedValues.indicatorColor !== initialValues.indicatorColor
-        ) {
-            updateGoal({
-                id: initialValues._id,
-                name: debouncedValues.name,
-                backgroundColor: debouncedValues.backgroundColor,
-                indicatorColor: debouncedValues.indicatorColor,
-                textColor: debouncedValues.textColor,
-                userId: localStorage.getItem("user_id") as Id<"users">
-            });
+        async function update() {
+            if (
+                debouncedValues.name !== initialValues.name ||
+                debouncedValues.backgroundColor !== initialValues.backgroundColor ||
+                debouncedValues.textColor !== initialValues.textColor ||
+                debouncedValues.indicatorColor !== initialValues.indicatorColor
+            ) {
+                try {
+                    await updateGoal({
+                        id: initialValues._id,
+                        name: debouncedValues.name,
+                        backgroundColor: debouncedValues.backgroundColor,
+                        indicatorColor: debouncedValues.indicatorColor,
+                        textColor: debouncedValues.textColor,
+                        userId: localStorage.getItem("user_id") as Id<"users">
+                    });
+                    notifications.show({
+                        title: "Цель обновлена",
+                        message: "Цель обновлена успешно",
+                        color: "green"
+                    });
+                } catch (error) {
+                    notifications.show({
+                        title: "Ошибка",
+                        message: "Ошибка при обновлении цели",
+                        color: "red"
+                    });
+                }
+            }
         }
+        update();
     }, [
-        debouncedValues, 
-        initialValues._id, 
+        debouncedValues,
+        initialValues._id,
         initialValues.name,
         initialValues.backgroundColor,
         initialValues.textColor,

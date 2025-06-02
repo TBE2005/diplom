@@ -11,7 +11,7 @@ import { FaBell, FaCheck, FaFlag, FaTrash } from "react-icons/fa";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Doc, Id } from "../../../convex/_generated/dataModel";
-
+import { notifications } from '@mantine/notifications';
 export default function Page() {
     const targets = useQuery(api.target.get);
     const alerts = useQuery(api.alert.get);
@@ -51,23 +51,39 @@ function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<
     const updateTarget = useMutation(api.target.update);
 
     useEffect(() => {
-        if (
-            debouncedValues.name !== props.name ||
-            debouncedValues.collected !== props.collected ||
-            debouncedValues.total !== props.total ||
-            debouncedValues.goalId !== props.goalId ||
-            debouncedValues.alertId !== props.alertId
-        ) {
-            updateTarget({
-                id: props._id,
-                name: debouncedValues.name,
-                collected: debouncedValues.collected,
-                total: debouncedValues.total,
-                goalId: debouncedValues.goalId as Id<"goals">,
-                alertId: debouncedValues.alertId as Id<"alerts">,
-                userId: localStorage.getItem("user_id") as Id<"users">
-            });
+        async function update() {
+            if (
+                debouncedValues.name !== props.name ||
+                debouncedValues.collected !== props.collected ||
+                debouncedValues.total !== props.total ||
+                debouncedValues.goalId !== props.goalId ||
+                debouncedValues.alertId !== props.alertId
+            ) {
+                try {
+                    await updateTarget({
+                        id: props._id,
+                        name: debouncedValues.name,
+                        collected: debouncedValues.collected,
+                        total: debouncedValues.total,
+                        goalId: debouncedValues.goalId as Id<"goals">,
+                        alertId: debouncedValues.alertId as Id<"alerts">,
+                        userId: localStorage.getItem("user_id") as Id<"users">
+                    });
+                    notifications.show({
+                        title: "Цель обновлена",
+                        message: "Цель обновлена успешно",
+                        color: "green"
+                    });
+                } catch (error) {
+                    notifications.show({
+                        title: "Ошибка",
+                        message: "Ошибка при обновлении цели",
+                        color: "red"
+                    });
+                }
+            }
         }
+        update();
     }, [debouncedValues, props._id, props.name, props.collected, props.total, props.goalId, props.alertId, updateTarget]);
 
     const deleteTarget = useMutation(api.target.remove);
