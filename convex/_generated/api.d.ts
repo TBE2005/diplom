@@ -16,6 +16,7 @@ import type {
 import type * as alert from "../alert.js";
 import type * as goal from "../goal.js";
 import type * as target from "../target.js";
+import type * as user from "../user.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -29,6 +30,7 @@ declare const fullApi: ApiFromModules<{
   alert: typeof alert;
   goal: typeof goal;
   target: typeof target;
+  user: typeof user;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

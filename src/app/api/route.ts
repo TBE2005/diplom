@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { fetchMutation, fetchQuery } from "convex/nextjs";
+import { api } from "../../../convex/_generated/api";
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
@@ -13,5 +15,13 @@ export async function GET(request: NextRequest) {
     const code = request.nextUrl.searchParams.get("code");
     const responseToken = await fetch(`https://yoomoney.ru/oauth/token?grant_type=authorization_code&code=${code}&client_id=${clientId}&client_secret=${clientSecret}`)
     const data = await responseToken.json();
-    return NextResponse.json(data);
+    const user = await fetchQuery(api.user.getByAccount, { account: data.account });
+    const response = NextResponse.redirect(new URL("/dashboard", request.url))
+    if (!user) {
+        const userId = await fetchMutation(api.user.create, { account: data.account, balance: data.balance });
+        response.cookies.set("user_id", userId, { httpOnly: true })
+    } else {
+        response.cookies.set("user_id", user._id, { httpOnly: true })
+    }
+    return response;
 }

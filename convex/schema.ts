@@ -24,6 +24,7 @@ export default defineSchema({
         userId: v.id("users"),
     }),
     users: defineTable({
-            
+        account: v.string(),
+        balance: v.number(),
     }),
 });
