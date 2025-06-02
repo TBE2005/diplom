@@ -35,16 +35,9 @@ export default function Page() {
 }
 
 
-function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<"goals">[] }) {
+function GoalCard(initialValues: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<"goals">[] }) {
     const form = useForm({
-        mode: 'uncontrolled',
-        initialValues: {
-            name: props.name,
-            collected: props.collected,
-            total: props.total,
-            goalId: props.goalId,
-            alertId: props.alertId,
-        },
+        initialValues,
     });
 
     const [debouncedValues] = useDebouncedValue(form.values, 500);
@@ -53,15 +46,15 @@ function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<
     useEffect(() => {
         async function update() {
             if (
-                debouncedValues.name !== props.name ||
-                debouncedValues.collected !== props.collected ||
-                debouncedValues.total !== props.total ||
-                debouncedValues.goalId !== props.goalId ||
-                debouncedValues.alertId !== props.alertId
+                debouncedValues.name !== initialValues.name ||
+                debouncedValues.collected !== initialValues.collected ||
+                debouncedValues.total !== initialValues.total ||
+                debouncedValues.goalId !== initialValues.goalId ||
+                debouncedValues.alertId !== initialValues.alertId
             ) {
                 try {
                     await updateTarget({
-                        id: props._id,
+                        id: initialValues._id,
                         name: debouncedValues.name,
                         collected: debouncedValues.collected,
                         total: debouncedValues.total,
@@ -111,7 +104,7 @@ function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<
                         )}
                     </CopyButton>
                     <Tooltip label="Удалить">
-                        <ActionIcon variant="light" color="red" size="lg" onClick={() => deleteTarget({ id: props._id })}>
+                        <ActionIcon variant="light" color="red" size="lg" onClick={() => deleteTarget({ id: initialValues._id })}>
                             <FaTrash />
                         </ActionIcon>
                     </Tooltip>
@@ -131,9 +124,9 @@ function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<
                         align: 'center'
                     }}
                 >
-                    {props.goals.map((goal) => (
+                    {initialValues.goals.map((goal) => (
                         <Carousel.Slide key={goal._id}>
-                            <Radio.Card value={goal._id.toString()} h={'100%'} className={classes.root} >
+                            <Radio.Card value={goal._id} h={'100%'} className={classes.root} >
                                 <GoalTemplate {...goal} name={form.values.name} collected={form.values.collected} total={form.values.total} />
                             </Radio.Card>
                         </Carousel.Slide >
@@ -151,9 +144,9 @@ function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<
                         align: 'center'
                     }}
                 >
-                    {props.alerts.map((alert) => (
+                    {initialValues.alerts.map((alert) => (
                         <Carousel.Slide key={alert._id}>
-                            <Radio.Card value={alert._id.toString()} h={'100%'} className={classes.root} >
+                            <Radio.Card value={alert._id} h={'100%'} className={classes.root} >
                                 <AlertTemplate {...alert} name={form.values.name} message={form.values.name} amount={form.values.collected} />
                             </Radio.Card>
                         </Carousel.Slide>
