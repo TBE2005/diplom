@@ -77,7 +77,7 @@ function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<
                 } catch (error) {
                     notifications.show({
                         title: "Ошибка",
-                        message: "Ошибка при обновлении цели",
+                        message: "Ошибка при обновлении цели" + error,
                         color: "red"
                     });
                 }

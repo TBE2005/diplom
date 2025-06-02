@@ -61,7 +61,7 @@ function GoalCard(initialValues: Doc<"goals">) {
                 } catch (error) {
                     notifications.show({
                         title: "Ошибка",
-                        message: "Ошибка при обновлении цели",
+                        message: "Ошибка при обновлении цели" + error,
                         color: "red"
                     });
                 }

@@ -60,7 +60,7 @@ function AlertCard(initialValues: Doc<"alerts">) {
                 } catch (error) {
                     notifications.show({
                         title: "Ошибка",
-                        message: "Ошибка при обновлении оповещения",
+                        message: "Ошибка при обновлении оповещения" + error,
                         color: "red"
                     });
                 }
