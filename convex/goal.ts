@@ -14,7 +14,6 @@ export const create = mutation({
     },
     handler: async (ctx, args) => {
         await ctx.db.insert("goals", {
-            name: "Новая цель",
             backgroundColor: "#000000",
             indicatorColor: "#000000",
             textColor: "#000000",
@@ -26,7 +25,6 @@ export const create = mutation({
 export const update = mutation({
     args: {
         id: v.id("goals"),
-        name: v.string(),
         backgroundColor: v.string(),
         indicatorColor: v.string(),
         textColor: v.string(),
@@ -34,7 +32,6 @@ export const update = mutation({
     },
     handler: async (ctx, args) => {
         await ctx.db.patch(args.id, {
-            name: args.name,
             backgroundColor: args.backgroundColor,
             indicatorColor: args.indicatorColor,
             textColor: args.textColor,

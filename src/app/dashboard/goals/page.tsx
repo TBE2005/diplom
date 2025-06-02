@@ -29,7 +29,6 @@ export default function Page() {
 
 function GoalCard(initialValues: Doc<"goals">) {
     const form = useForm({
-        mode: 'uncontrolled',
         initialValues,
     });
 
@@ -37,10 +36,8 @@ function GoalCard(initialValues: Doc<"goals">) {
     const deleteGoal = useMutation(api.goal.remove);
     const [debouncedValues] = useDebouncedValue(form.values, 500);
     useEffect(() => {
-        console.log(debouncedValues);
         async function update() {
             if (
-                debouncedValues.name !== initialValues.name ||
                 debouncedValues.backgroundColor !== initialValues.backgroundColor ||
                 debouncedValues.textColor !== initialValues.textColor ||
                 debouncedValues.indicatorColor !== initialValues.indicatorColor
@@ -48,7 +45,6 @@ function GoalCard(initialValues: Doc<"goals">) {
                 try {
                     await updateGoal({
                         id: initialValues._id,
-                        name: debouncedValues.name,
                         backgroundColor: debouncedValues.backgroundColor,
                         indicatorColor: debouncedValues.indicatorColor,
                         textColor: debouncedValues.textColor,
@@ -71,6 +67,7 @@ function GoalCard(initialValues: Doc<"goals">) {
         update();
     }, [
         debouncedValues
+
     ]);
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>

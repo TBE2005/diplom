@@ -11,14 +11,12 @@ export default defineSchema({
         userId: v.id("users"),
     }),
     goals: defineTable({
-        name: v.string(),
         backgroundColor: v.string(),
         indicatorColor: v.string(),
         textColor: v.string(),
         userId: v.id("users"),
     }),
     alerts: defineTable({
-        name: v.string(),
         backgroundColor: v.string(),
         textColor: v.string(),
         userId: v.id("users"),
