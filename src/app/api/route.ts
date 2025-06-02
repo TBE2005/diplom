@@ -6,6 +6,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "Hello, world!" });
 }
 
-export async function GET() {
-    return NextResponse.json({ message: "Hello, world!" });
+export async function GET(request: NextRequest) {
+    const code = request.nextUrl.searchParams.get("code");
+    console.log(code);
+    return NextResponse.json({ code });
 }
