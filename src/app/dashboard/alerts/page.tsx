@@ -68,12 +68,7 @@ function AlertCard(initialValues: Doc<"alerts">) {
         }
         update();
     }, [
-        debouncedValues,
-        initialValues._id,
-        initialValues.name,
-        initialValues.backgroundColor,
-        initialValues.textColor,
-        updateAlert
+        debouncedValues
     ]);
 
     return (

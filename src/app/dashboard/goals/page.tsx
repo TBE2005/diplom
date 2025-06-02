@@ -69,13 +69,7 @@ function GoalCard(initialValues: Doc<"goals">) {
         }
         update();
     }, [
-        debouncedValues,
-        initialValues._id,
-        initialValues.name,
-        initialValues.backgroundColor,
-        initialValues.textColor,
-        initialValues.indicatorColor,
-        updateGoal
+        debouncedValues
     ]);
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>

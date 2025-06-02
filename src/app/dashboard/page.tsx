@@ -84,7 +84,7 @@ function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<
             }
         }
         update();
-    }, [debouncedValues, props._id, props.name, props.collected, props.total, props.goalId, props.alertId, updateTarget]);
+    }, [debouncedValues]);
 
     const deleteTarget = useMutation(api.target.remove);
     return (
