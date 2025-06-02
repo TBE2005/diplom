@@ -37,6 +37,7 @@ function GoalCard(initialValues: Doc<"goals">) {
     const deleteGoal = useMutation(api.goal.remove);
     const [debouncedValues] = useDebouncedValue(form.values, 500);
     useEffect(() => {
+        console.log(debouncedValues);
         async function update() {
             if (
                 debouncedValues.name !== initialValues.name ||
