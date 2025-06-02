@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
         const user = await fetchQuery(api.user.getByAccount, { account: account.account });
         const response = NextResponse.redirect(new URL("/dashboard", request.url))
         if (!user) {
-            const userId = await fetchMutation(api.user.create, { account: data.account, balance: data.balance });
+            const userId = await fetchMutation(api.user.create, { account: account.account, balance: account.balance });
             response.cookies.set("user_id", userId, { httpOnly: true })
         } else {
             response.cookies.set("user_id", user._id, { httpOnly: true })
