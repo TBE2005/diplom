@@ -10,12 +10,15 @@ export const get = query({
 });
 
 export const create = mutation({
-    handler: async (ctx) => {
-        await ctx.db.insert("alerts",  {
+    args: {
+        userId: v.id("users"),
+    },
+    handler: async (ctx, args) => {
+        await ctx.db.insert("alerts", {
             name: "Новое оповещение",
             backgroundColor: "#000000",
             textColor: "#000000",
-            userId: "1" as Id<"users">,
+            userId: args.userId,
         });
     },
 });

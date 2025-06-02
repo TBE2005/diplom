@@ -3,7 +3,7 @@ import { Button, Card, ColorInput, SimpleGrid, Text } from "@mantine/core";
 import { useForm } from '@mantine/form';
 import { api } from "../../../../convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
-import { Doc } from "../../../../convex/_generated/dataModel";
+import { Doc, Id } from "../../../../convex/_generated/dataModel";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect } from "react";
 import { AlertTemplate } from "@/components/alert-template";
@@ -12,7 +12,9 @@ export default function Page() {
     const createAlert = useMutation(api.alert.create);
     return (
         <>
-            <Button onClick={() => createAlert()}>Добавить оповещение</Button>
+            <Button onClick={() => createAlert({
+                userId: localStorage.getItem("user_id") as Id<"users">
+            })}>Добавить оповещение</Button>
             <SimpleGrid mt={'md'} cols={{ sm: 1, md: 2, lg: 3 }}
                 spacing={{ base: 10, sm: 'xl' }}
                 verticalSpacing={{ base: 'md', sm: 'xl' }}>

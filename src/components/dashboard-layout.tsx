@@ -10,6 +10,7 @@ import { MdOutlineRequestPage } from "react-icons/md";
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { Id } from '../../convex/_generated/dataModel';
+import { useEffect } from 'react';
 const links = [
     { label: 'Цели', href: '/dashboard' },
     { label: 'Сборы', href: '/dashboard/goals' },
@@ -28,6 +29,11 @@ export default function DashboardLayout({ userId, children }: { userId: string, 
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
     const user = useQuery(api.user.getById, { id: userId as Id<"users"> });
+    useEffect(() => {
+        if (user?._id) {
+            localStorage.setItem("user_id", user._id);
+        }
+    }, [user]);
     const pathname = usePathname();
     return <AppShell
         header={{ height: 70 }}

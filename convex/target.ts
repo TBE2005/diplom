@@ -10,14 +10,15 @@ export const get = query({
 });
 
 export const create = mutation({
-    handler: async (ctx) => {
+    args: {
+        userId: v.id("users"),
+    },
+    handler: async (ctx, args) => {
         await ctx.db.insert("targets", {
             name: "Новая цель",
-            collected: 0,
-            total: 0,
-            goalId: "1" as Id<"goals">,
-            alertId: "1" as Id<"alerts">,
-            userId: "1" as Id<"users">,
+            collected: 10,
+            total: 100,
+            userId: args.userId,
         });
     },
 });

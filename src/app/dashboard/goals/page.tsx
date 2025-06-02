@@ -3,7 +3,7 @@ import { Button, Card, ColorInput, SimpleGrid, Text } from "@mantine/core";
 import { useForm } from '@mantine/form';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { Doc } from "../../../../convex/_generated/dataModel";
+import { Doc, Id } from "../../../../convex/_generated/dataModel";
 import { useEffect } from "react";
 import { useDebouncedValue } from "@mantine/hooks";
 import { GoalTemplate } from "@/components/goal-template";
@@ -12,7 +12,9 @@ export default function Page() {
     const createGoal = useMutation(api.goal.create);
     return (
         <>
-            <Button onClick={() => createGoal()}>Добавить цель</Button>
+            <Button onClick={() => createGoal({
+                userId: localStorage.getItem("user_id") as Id<"users">
+            })}>Добавить цель</Button>
             <SimpleGrid mt={'md'} cols={{ sm: 1, md: 2, lg: 3 }}
                 spacing={{ base: 10, sm: 'xl' }}
                 verticalSpacing={{ base: 'md', sm: 'xl' }}>

@@ -20,7 +20,9 @@ export default function Page() {
     const createTarget = useMutation(api.target.create);
     return (
         <>
-            <Button onClick={() => createTarget()}>Новая цель</Button>
+            <Button onClick={() => createTarget({
+                userId: localStorage.getItem("user_id") as Id<"users">
+            })}>Новая цель</Button>
             <SimpleGrid mt={'md'} cols={{ sm: 1, md: 2, lg: 3 }}
                 spacing={{ base: 10, sm: 'xl' }}
                 verticalSpacing={{ base: 'md', sm: 'xl' }}>
