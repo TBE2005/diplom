@@ -52,35 +52,27 @@ function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<
 
     useEffect(() => {
         async function update() {
-            if (
-                debouncedValues.name !== props.name ||
-                debouncedValues.collected !== props.collected ||
-                debouncedValues.total !== props.total ||
-                debouncedValues.goalId !== props.goalId ||
-                debouncedValues.alertId !== props.alertId
-            ) {
-                try {
-                    await updateTarget({
-                        id: props._id,
-                        name: debouncedValues.name,
-                        collected: debouncedValues.collected,
-                        total: debouncedValues.total,
-                        goalId: debouncedValues.goalId as Id<"goals">,
-                        alertId: debouncedValues.alertId as Id<"alerts">,
-                        userId: localStorage.getItem("user_id") as Id<"users">
-                    });
-                    notifications.show({
-                        title: "Цель обновлена",
-                        message: "Цель обновлена успешно",
-                        color: "green"
-                    });
-                } catch (error) {
-                    notifications.show({
-                        title: "Ошибка",
-                        message: "Ошибка при обновлении цели" + error,
-                        color: "red"
-                    });
-                }
+            try {
+                await updateTarget({
+                    id: props._id,
+                    name: debouncedValues.name,
+                    collected: debouncedValues.collected,
+                    total: debouncedValues.total,
+                    goalId: debouncedValues.goalId as Id<"goals">,
+                    alertId: debouncedValues.alertId as Id<"alerts">,
+                    userId: localStorage.getItem("user_id") as Id<"users">
+                });
+                notifications.show({
+                    title: "Цель обновлена",
+                    message: "Цель обновлена успешно",
+                    color: "green"
+                });
+            } catch (error) {
+                notifications.show({
+                    title: "Ошибка",
+                    message: "Ошибка при обновлении цели" + error,
+                    color: "red"
+                });
             }
         }
         update();
