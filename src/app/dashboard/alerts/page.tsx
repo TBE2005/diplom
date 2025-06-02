@@ -47,6 +47,7 @@ function AlertCard(initialValues: Doc<"alerts">) {
                 name: debouncedValues.name,
                 backgroundColor: debouncedValues.backgroundColor,
                 textColor: debouncedValues.textColor,
+                userId: localStorage.getItem("user_id") as Id<"users">
             });
         }
     }, [

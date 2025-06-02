@@ -47,6 +47,7 @@ function GoalCard(initialValues: Doc<"goals">) {
                 backgroundColor: debouncedValues.backgroundColor,
                 indicatorColor: debouncedValues.indicatorColor,
                 textColor: debouncedValues.textColor,
+                userId: localStorage.getItem("user_id") as Id<"users">
             });
         }
     }, [

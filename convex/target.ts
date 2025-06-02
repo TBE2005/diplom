@@ -31,6 +31,7 @@ export const update = mutation({
         total: v.number(),
         goalId: v.id("goals"),
         alertId: v.id("alerts"),
+        userId: v.id("users"),
     },
     handler: async (ctx, args) => {
         await ctx.db.patch(args.id, {
@@ -39,6 +40,7 @@ export const update = mutation({
             total: args.total,
             goalId: args.goalId,
             alertId: args.alertId,
+            userId: args.userId,
         });
     },
 });

@@ -29,12 +29,14 @@ export const update = mutation({
         name: v.string(),
         backgroundColor: v.string(),
         textColor: v.string(),
+        userId: v.id("users"),
     },
     handler: async (ctx, args) => {
         await ctx.db.patch(args.id, {
             name: args.name,
             backgroundColor: args.backgroundColor,
             textColor: args.textColor,
+            userId: args.userId,
         });
     },
 });

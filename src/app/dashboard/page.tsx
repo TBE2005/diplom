@@ -65,6 +65,7 @@ function GoalCard(props: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<
                 total: debouncedValues.total,
                 goalId: debouncedValues.goalId as Id<"goals">,
                 alertId: debouncedValues.alertId as Id<"alerts">,
+                userId: localStorage.getItem("user_id") as Id<"users">
             });
         }
     }, [debouncedValues, props._id, props.name, props.collected, props.total, props.goalId, props.alertId, updateTarget]);
