@@ -29,7 +29,6 @@ export default function Page() {
 
 function AlertCard(initialValues: Doc<"alerts">) {
     const form = useForm({
-        mode: 'uncontrolled',
         initialValues,
     });
     const updateAlert = useMutation(api.alert.update);
@@ -40,14 +39,12 @@ function AlertCard(initialValues: Doc<"alerts">) {
     useEffect(() => {
         async function update() {
             if (
-                debouncedValues.name !== initialValues.name ||
                 debouncedValues.backgroundColor !== initialValues.backgroundColor ||
                 debouncedValues.textColor !== initialValues.textColor
             ) {
                 try {
                     await updateAlert({
                         id: initialValues._id,
-                        name: debouncedValues.name,
                         backgroundColor: debouncedValues.backgroundColor,
                         textColor: debouncedValues.textColor,
                         userId: localStorage.getItem("user_id") as Id<"users">

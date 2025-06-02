@@ -67,7 +67,6 @@ function GoalCard(initialValues: Doc<"goals">) {
         update();
     }, [
         debouncedValues
-
     ]);
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>
