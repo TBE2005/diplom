@@ -1,12 +1,12 @@
 'use client'
-import { Button, Card, ColorInput, Flex, Progress, SimpleGrid, Text, Stack } from "@mantine/core";
+import { Button, Card, ColorInput, SimpleGrid, Text } from "@mantine/core";
 import { useForm } from '@mantine/form';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Doc } from "../../../../convex/_generated/dataModel";
 import { useEffect } from "react";
 import { useDebouncedValue } from "@mantine/hooks";
-
+import { GoalTemplate } from "@/components/goal-template";
 export default function Page() {
     const goals = useQuery(api.goal.get);
     const createGoal = useMutation(api.goal.create);
@@ -22,24 +22,6 @@ export default function Page() {
             </SimpleGrid>
         </>
     )
-}
-
-
-export function GoalTemplate(settings: Doc<"goals"> & { collected: number, total: number, name: string }) {
-    return (
-        <Progress.Root bg={settings.backgroundColor} size={100}>
-            <Progress.Section value={35} color={settings.indicatorColor} />
-            <Stack gap="xs" pos="absolute" top={0} left={0} right={0} bottom={0} justify="center" align="center">
-                <Text c={settings.textColor}>{settings.name}</Text>
-                <Flex align="center" gap="xs">
-                    <Text c={settings.textColor}>{settings.collected}</Text>
-                    <Text c={settings.textColor}>/</Text>
-                    <Text c={settings.textColor}>{settings.total}</Text>
-                </Flex>
-            </Stack>
-        </Progress.Root>
-    )
-
 }
 
 function GoalCard(initialValues: Doc<"goals">) {

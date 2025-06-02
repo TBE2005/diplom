@@ -1,11 +1,12 @@
 'use client'
-import { Button, Card, Center, ColorInput, Flex, SimpleGrid, Stack, Text } from "@mantine/core";
+import { Button, Card, ColorInput, SimpleGrid, Text } from "@mantine/core";
 import { useForm } from '@mantine/form';
 import { api } from "../../../../convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
 import { Doc } from "../../../../convex/_generated/dataModel";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect } from "react";
+import { AlertTemplate } from "@/components/alert-template";
 export default function Page() {
     const alerts = useQuery(api.alert.get);
     const createAlert = useMutation(api.alert.create);
@@ -22,25 +23,6 @@ export default function Page() {
         </>
     )
 }
-
-export function AlertTemplate(settings: Doc<"alerts"> & { name: string, message: string, amount: number }) {
-    return (
-        <Card bg={settings.backgroundColor} >
-            <Center>
-                <Stack gap="xs" align="center">
-                    <Flex align="center" gap="xs">
-                        <Text c={settings.textColor}>{settings.name}</Text>
-                        <Text c={settings.textColor}>-</Text>
-                        <Text c={settings.textColor}>{settings.amount}</Text>
-                    </Flex>
-                    <Text c={settings.textColor}>{settings.message}</Text>
-                </Stack>
-            </Center>
-        </Card>
-    )
-
-}
-
 
 function AlertCard(initialValues: Doc<"alerts">) {
     const form = useForm({
