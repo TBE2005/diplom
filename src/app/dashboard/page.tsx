@@ -1,5 +1,5 @@
 'use client'
-import { ActionIcon, Button, Card, CopyButton, NumberInput, Radio, SimpleGrid, Text, TextInput, Tooltip } from "@mantine/core";
+import { ActionIcon, Button, Card, CopyButton, NumberInput, Radio, SimpleGrid,TextInput, Tooltip, Skeleton } from "@mantine/core";
 import { Carousel } from '@mantine/carousel';
 import { useForm } from '@mantine/form';
 import { useDebouncedValue } from '@mantine/hooks';
@@ -28,7 +28,22 @@ export default function Page() {
                 verticalSpacing={{ base: 'md', sm: 'xl' }}>
                 {targets ? targets?.map((target) => (
                     <GoalCard key={target._id} {...target} alerts={alerts ?? []} goals={goals ?? []} />
-                )) : <Text>No targets</Text>}
+                )) : (
+                    <>
+                        {[1, 2, 3].map((i) => (
+                            <Card key={i} shadow="sm" padding="lg" radius="md" withBorder>
+                                <SimpleGrid cols={2} mt="md">
+                                    <Skeleton height={36} width="70%" />
+                                    <Skeleton height={36} width="30%" ml="auto" />
+                                    <Skeleton height={36} mt="sm" />
+                                    <Skeleton height={36} mt="sm" />
+                                </SimpleGrid>
+                                <Skeleton height={150} mt="md" radius="md" />
+                                <Skeleton height={150} mt="md" radius="md" />
+                            </Card>
+                        ))}
+                    </>
+                )}
             </SimpleGrid>
         </>
     )

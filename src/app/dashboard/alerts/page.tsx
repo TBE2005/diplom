@@ -1,5 +1,5 @@
 'use client'
-import { Button, Card, ColorInput, SimpleGrid, Text } from "@mantine/core";
+import { Button, Card, ColorInput, SimpleGrid, Skeleton } from "@mantine/core";
 import { useForm } from '@mantine/form';
 import { api } from "../../../../convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
@@ -21,7 +21,22 @@ export default function Page() {
                 verticalSpacing={{ base: 'md', sm: 'xl' }}>
                 {alerts ? alerts?.map((alert) => (
                     <AlertCard key={alert._id} {...alert} />
-                )) : <Text>No alerts</Text>}
+                )) : (
+                    <>
+                        {[1, 2, 3].map((i) => (
+                            <Card key={i} shadow="sm" padding="lg" radius="md" withBorder>
+                                <Card.Section>
+                                    <Skeleton height={150} radius={0} />
+                                </Card.Section>
+                                <SimpleGrid cols={2} mt="md">
+                                    <Skeleton height={36} mt="sm" />
+                                    <Skeleton height={36} mt="sm" />
+                                </SimpleGrid>
+                                <Skeleton height={36} mt="md" width="40%" />
+                            </Card>
+                        ))}
+                    </>
+                )}
             </SimpleGrid>
         </>
     )

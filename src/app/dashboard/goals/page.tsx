@@ -1,5 +1,5 @@
 'use client'
-import { Button, Card, ColorInput, SimpleGrid, Text } from "@mantine/core";
+import { Button, Card, ColorInput, SimpleGrid, Skeleton } from "@mantine/core";
 import { useForm } from '@mantine/form';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
@@ -21,7 +21,23 @@ export default function Page() {
                 verticalSpacing={{ base: 'md', sm: 'xl' }}>
                 {goals ? goals.map((goal) => (
                     <GoalCard key={goal._id} {...goal} />
-                )) : <Text>No goals</Text>}
+                )) : (
+                    <>
+                        {[1, 2, 3].map((i) => (
+                            <Card key={i} shadow="sm" padding="lg" radius="md" withBorder>
+                                <Card.Section>
+                                    <Skeleton height={180} radius={0} />
+                                </Card.Section>
+                                <SimpleGrid cols={2} mt="md">
+                                    <Skeleton height={36} mt="sm" />
+                                    <Skeleton height={36} mt="sm" />
+                                    <Skeleton height={36} mt="sm" />
+                                </SimpleGrid>
+                                <Skeleton height={36} mt="md" width="40%" />
+                            </Card>
+                        ))}
+                    </>
+                )}
             </SimpleGrid>
         </>
     )
