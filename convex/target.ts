@@ -54,12 +54,12 @@ export const remove = mutation({
     },
 });
 
-export const byUserAccount = query({
+export const byUserId = query({
     args: {
-        userAccount: v.string(),
+        userId: v.id("users"),
     },
     handler: async (ctx, args) => {
-        return await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.userAccount)).collect();
+        return await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.userId)).collect();
     },
 });
 
