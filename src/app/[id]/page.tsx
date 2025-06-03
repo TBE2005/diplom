@@ -45,6 +45,7 @@ export default function Page() {
                     label="Цель"
                     placeholder="Выберите цель"
                     value={form.values.targetId}
+                    defaultValue={targetsByUserId?.[0]?._id}
                     onChange={(value) => form.setFieldValue("targetId", value as Id<"targets">)}
                     data={targetsByUserId?.map(target => ({
                         value: target._id,
