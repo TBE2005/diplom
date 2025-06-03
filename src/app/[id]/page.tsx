@@ -44,16 +44,16 @@ export default function Page() {
                 <Select
                     label="Цель"
                     placeholder="Выберите цель"
-                    {...form.getInputProps("targetId")}
+                    value={form.values.targetId}
+                    onChange={(value) => form.setFieldValue("targetId", value as Id<"targets">)}
                     data={targetsByUserId?.map(target => ({
                         value: target._id,
                         label: target.name,
                     })) || []}
-                    defaultValue={targetsByUserId?.[0]?._id}
                     allowDeselect={false}
                 />
 
-                <Button type="submit" className="mt-2">Отправить</Button>
+                <Button type="submit" mt={4}>Отправить</Button>
             </form>
         </Center >
     )
