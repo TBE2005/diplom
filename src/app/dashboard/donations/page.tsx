@@ -2,12 +2,22 @@
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
-import { Card, Text, Group, Badge, Stack, Container, Title, Divider } from "@mantine/core";
+import { Card, Text, Group, Badge, Stack, Container, Title, Divider, Loader, Center } from "@mantine/core";
 import { FaMoneyBillWave } from "react-icons/fa";
 
 export default function Page() {
     const donations = useQuery(api.donation.getByUserId, { userId: localStorage.getItem("user_id") as Id<"users"> });
-    
+
+    if (!donations) {
+        return <Center>
+            <Loader />
+        </Center>
+    }
+    if (donations.length === 0) {
+        return <Center>
+            <Text>Донатов нет</Text>
+        </Center>
+    }
     return (
         <Container size="xl" p="md">
             <Title order={2} mb="md">Донаты</Title>
@@ -28,7 +38,7 @@ export default function Page() {
                         </Group>
                         {donation.message && (
                             <Text c="dimmed" size="sm">
-                                "{donation.message}"
+                                {donation.message}
                             </Text>
                         )}
                     </Card>
