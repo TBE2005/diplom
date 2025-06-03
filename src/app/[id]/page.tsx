@@ -44,6 +44,7 @@ export default function Page() {
                 <Select
                     label="Цель"
                     placeholder="Выберите цель"
+                    {...form.getInputProps("targetId")}
                     data={targetsByUserId?.map(target => ({
                         value: target._id,
                         label: target.name,
@@ -52,7 +53,7 @@ export default function Page() {
                     allowDeselect={false}
                 />
 
-                <Button type="submit">Отправить</Button>
+                <Button type="submit" className="mt-2">Отправить</Button>
             </form>
         </Center >
     )
