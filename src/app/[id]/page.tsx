@@ -36,6 +36,7 @@ export default function Page() {
                     message: values.message,
                     targetId: values.targetId as Id<"targets">,
                     userId: user?._id as Id<"users">,
+                    name: values.name,
                 });
             })}>
                 <TextInput label="Имя" {...form.getInputProps("name")} />

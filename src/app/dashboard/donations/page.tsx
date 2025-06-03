@@ -36,6 +36,7 @@ export default function Page() {
                                 </Badge>
                             )}
                         </Group>
+                        <Text fw={700} size="lg">{donation?.name}</Text>
                         {donation.message && (
                             <Text c="dimmed" size="sm">
                                 {donation.message}

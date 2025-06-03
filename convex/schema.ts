@@ -26,6 +26,7 @@ export default defineSchema({
         balance: v.number(),
     }),
     donations: defineTable({
+        name: v.string(),
         amount: v.number(),
         message: v.string(),
         targetId: v.id("targets"),

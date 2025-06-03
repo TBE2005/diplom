@@ -7,6 +7,7 @@ export const create = mutation({
         message: v.string(),
         targetId: v.id("targets"),
         userId: v.id("users"),
+        name: v.string(),
     },
     handler: async (ctx, args) => {
         await ctx.db.insert("donations", {
@@ -14,6 +15,7 @@ export const create = mutation({
             message: args.message,
             targetId: args.targetId,
             userId: args.userId,
+            name: args.name,
         });
     },
 });
