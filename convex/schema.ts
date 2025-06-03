@@ -25,4 +25,11 @@ export default defineSchema({
         account: v.string(),
         balance: v.number(),
     }),
+    donations: defineTable({
+        amount: v.number(),
+        message: v.string(),
+        targetId: v.id("targets"),
+        userId: v.id("users"),
+    }),
 });
+

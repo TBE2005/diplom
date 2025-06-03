@@ -13,6 +13,7 @@ import { Id } from '../../convex/_generated/dataModel';
 import { useEffect } from 'react';
 const links = [
     { label: 'Цели', href: '/dashboard' },
+    { label: 'Донаты', href: '/dashboard/donations' },
     { label: 'Сборы', href: '/dashboard/goals' },
     { label: 'Оповещения', href: '/dashboard/alerts' },
 ]

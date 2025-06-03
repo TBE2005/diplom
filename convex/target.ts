@@ -53,3 +53,13 @@ export const remove = mutation({
         await ctx.db.delete(args.id);
     },
 });
+
+export const byUserAccount = query({
+    args: {
+        userAccount: v.string(),
+    },
+    handler: async (ctx, args) => {
+        return await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.userAccount)).collect();
+    },
+});
+

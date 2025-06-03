@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as alert from "../alert.js";
+import type * as donation from "../donation.js";
 import type * as goal from "../goal.js";
 import type * as target from "../target.js";
 import type * as user from "../user.js";
@@ -28,6 +29,7 @@ import type * as user from "../user.js";
  */
 declare const fullApi: ApiFromModules<{
   alert: typeof alert;
+  donation: typeof donation;
   goal: typeof goal;
   target: typeof target;
   user: typeof user;
