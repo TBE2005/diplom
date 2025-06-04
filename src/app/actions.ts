@@ -26,11 +26,11 @@ export async function processPayment(
         const data = await response.json();
 
         if (data.status === "refused") {
-            throw new Error(data);
+            throw new Error(JSON.stringify(data));
         }
 
         return data;
     } catch (error) {
-        return error;
+        return JSON.parse(error as string);
     }
 } 
