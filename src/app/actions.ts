@@ -31,7 +31,6 @@ export async function processPayment(
 
         return data;
     } catch (error) {
-        console.error("Payment error:", error);
-        return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
+        return error;
     }
 } 
