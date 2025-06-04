@@ -66,7 +66,7 @@ export default function Page() {
                 message: "Донат не отправлен",
                 color: "red",
             });
-            console.log(JSON.parse(error as string));
+            console.log(error);
         }
     }
     
