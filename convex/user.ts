@@ -17,6 +17,15 @@ export const create = mutation({
     },
 });
 
+export const update = mutation({
+    args: {
+        id: v.id("users"),
+        access_token: v.string(),
+    },
+    handler: async (ctx, args) => {
+        await ctx.db.patch(args.id, { access_token: args.access_token });
+    },
+});
 export const getByAccessToken = query({
     args: {
         access_token: v.string(),
@@ -43,3 +52,4 @@ export const getAll = query({
         return await ctx.db.query("users").collect();
     },
 });
+

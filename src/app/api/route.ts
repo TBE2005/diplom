@@ -31,6 +31,8 @@ export async function GET(request: NextRequest) {
 
         if (!user) {
             await fetchMutation(api.user.create, { account: account.account, balance: account.balance, access_token: data.access_token });
+        } else {
+            await fetchMutation(api.user.update, { id: user._id, access_token: data.access_token });
         }
         return response;
     } catch (error) {
