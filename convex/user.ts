@@ -5,25 +5,28 @@ export const create = mutation({
     args: {
         account: v.string(),
         balance: v.number(),
+        access_token: v.string(),
     },
     handler: async (ctx, args) => {
         const user = await ctx.db.insert("users", {
             account: args.account,
             balance: args.balance,
+            access_token: args.access_token,
         });
         return user;
     },
 });
 
-export const getById = query({
+export const getByAccessToken = query({
     args: {
-        id: v.id("users"),
+        access_token: v.string(),
     },
     handler: async (ctx, args) => {
-        const user = await ctx.db.get(args.id);
+        const user = await ctx.db.query("users").filter(q => q.eq(q.field("access_token"), args.access_token)).first();
         return user;
     },
 });
+
 export const getByAccount = query({
     args: {
         account: v.string(),
@@ -31,5 +34,12 @@ export const getByAccount = query({
     handler: async (ctx, args) => {
         const user = await ctx.db.query("users").filter(q => q.eq(q.field("account"), args.account)).first();
         return user;
+    },
+});
+
+export const getAll = query({
+    args: {},
+    handler: async (ctx) => {
+        return await ctx.db.query("users").collect();
     },
 });

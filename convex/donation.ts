@@ -10,6 +10,7 @@ export const create = mutation({
         name: v.string(),
     },
     handler: async (ctx, args) => {
+        
         await ctx.db.insert("donations", {
             amount: args.amount,
             message: args.message,

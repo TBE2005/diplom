@@ -3,9 +3,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-    const userId = (await cookies()).get("user_id")?.value;
-    if (!userId) {
+    const accessToken = (await cookies()).get("access_token")?.value;
+    if (!accessToken) {
         redirect("/");
     }
-    return <DashboardLayout userId={userId}>{children}</DashboardLayout>;
+    return <DashboardLayout accessToken={accessToken}>{children}</DashboardLayout>;
 }

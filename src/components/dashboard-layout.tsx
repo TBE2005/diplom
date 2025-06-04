@@ -9,10 +9,10 @@ import { FaUsers, FaMoneyBillWave, FaBullseye, FaBell, FaMoneyBill, FaCheck } fr
 import { MdOutlineRequestPage } from "react-icons/md";
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
-import { Id } from '../../convex/_generated/dataModel';
 import { useEffect } from 'react';
 const links = [
-    { label: 'Цели', href: '/dashboard' },
+    { label: 'Мои цели', href: '/dashboard' },
+    { label: 'Цели', href: '/dashboard/targets' },
     { label: 'Донаты', href: '/dashboard/donations' },
     { label: 'Сборы', href: '/dashboard/goals' },
     { label: 'Оповещения', href: '/dashboard/alerts' },
@@ -26,13 +26,13 @@ const statData = [
     { icon: FaMoneyBill, label: 'Выплачено', value: '1,254', color: 'blue' },
 ];
 
-export default function DashboardLayout({ userId, children }: { userId: string, children: React.ReactNode }) {
+export default function DashboardLayout({ accessToken, children }: { accessToken: string, children: React.ReactNode }) {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
-    const user = useQuery(api.user.getById, { id: userId as Id<"users"> });
+    const user = useQuery(api.user.getByAccessToken, { access_token: accessToken });
     useEffect(() => {
         if (user?._id) {
-            localStorage.setItem("user_id", user._id);
+            localStorage.setItem("access_token", user.access_token);
         }
     }, [user]);
     const pathname = usePathname();

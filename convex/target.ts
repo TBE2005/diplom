@@ -9,6 +9,17 @@ export const get = query({
     },
 });
 
+export const getById = query({
+    args: {
+        id: v.id("targets"),
+    },
+    handler: async (ctx, args) => {
+        const target = await ctx.db.get(args.id);
+        const userTarget = await ctx.db.query("users").filter(q => q.eq(q.field("_id"), target?.userId)).first();
+        return { ...target, user: userTarget };
+    },
+});
+
 export const create = mutation({
     args: {
         userId: v.id("users"),

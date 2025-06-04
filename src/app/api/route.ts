@@ -23,14 +23,14 @@ export async function GET(request: NextRequest) {
                 "Authorization": `Bearer ${data.access_token}`
             }
         })
+
         const account = await responseAccount.json();
         const user = await fetchQuery(api.user.getByAccount, { account: account.account });
         const response = NextResponse.redirect(new URL("/dashboard", request.url))
+        response.cookies.set("access_token", data.access_token, { httpOnly: true })
+
         if (!user) {
-            const userId = await fetchMutation(api.user.create, { account: account.account, balance: account.balance });
-            response.cookies.set("user_id", userId, { httpOnly: true })
-        } else {
-            response.cookies.set("user_id", user._id, { httpOnly: true })
+            await fetchMutation(api.user.create, { account: account.account, balance: account.balance });
         }
         return response;
     } catch (error) {
