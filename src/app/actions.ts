@@ -24,7 +24,7 @@ export async function processPayment(
         });
 
         const data = await response.json();
-
+        console.log("@", data);
         if (data.status === "refused") {
             throw new Error(JSON.stringify(data));
         }
