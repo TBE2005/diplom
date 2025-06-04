@@ -31,6 +31,6 @@ export async function processPayment(
 
         return data;
     } catch (error) {
-        return JSON.parse(error as string);
+        return error;
     }
 } 
