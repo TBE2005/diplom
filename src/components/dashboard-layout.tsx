@@ -33,6 +33,7 @@ export default function DashboardLayout({ accessToken, children }: { accessToken
     useEffect(() => {
         if (user?._id) {
             localStorage.setItem("access_token", user.access_token);
+            localStorage.setItem("user_id", user._id);
         }
     }, [user]);
     const pathname = usePathname();
