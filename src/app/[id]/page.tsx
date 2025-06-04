@@ -77,7 +77,7 @@ export default function Page() {
         <Center>
             <Paper shadow="md" p="xl" radius="md" withBorder maw={500} w="100%">
                 <Title order={2} mb="md">{target.name}</Title>
-                <Text mb="md">Автор: {user.account}</Text>
+                <Text mb="md">Автор: {target.user?.account}</Text>
 
                 <Group mb="md">
                     <Text>{target.collected} ₽ из {target.total} ₽</Text>
