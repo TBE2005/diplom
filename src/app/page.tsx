@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const clientId = "E69B1725E46F1E7855155A622D7952CF616D37C90D134955B4604150B175DF69"
 const redirectUri = "https://diplom-liard-three.vercel.app/api"
-const scope = "account-info+operation-history"
+const scope = "account-info+operation-history+payment-p2p"
 const responseType = "code"
 
 const url = `https://yoomoney.ru/oauth/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectUri}&scope=${scope}`
