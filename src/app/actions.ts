@@ -15,21 +15,21 @@ export async function processPayment(
             comment: comment,
             message: name,
         });
-        
+
         const response = await fetch(`https://yoomoney.ru/request-payment?${params.toString()}`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
             }
         });
-        
+
         const data = await response.json();
-        
+
         if (data.status === "refused") {
-            throw new Error(data.error);
+            throw new Error(data);
         }
-        
-        return { success: true };
+
+        return data;
     } catch (error) {
         console.error("Payment error:", error);
         return { success: false, error: error instanceof Error ? error.message : "Unknown error" };
