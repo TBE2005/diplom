@@ -6,6 +6,8 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
 import { notifications } from "@mantine/notifications";
+import { processPayment } from "../actions";
+
 export default function Page() {
     const { id } = useParams();
     const target = useQuery(api.target.getById, { id: id as Id<"targets"> });
@@ -27,27 +29,23 @@ export default function Page() {
         </Center>
     }
 
-
-
     const payment = async (values: typeof form.values) => {
         try {
-            const params = new URLSearchParams({
-                pattern_id: "p2p",
-                to: target.user?.account as string,
-                amount: values.amount.toString(),
-                comment: values.message,
-                message: values.name,
-            });
-            const payment = await fetch(`https://yoomoney.ru/request-payment?${params.toString()}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
-                }
-            }).then(res => res.json()).then(data => {
-                if (data.status === "refused") {
-                    throw new Error(data.error);
-                }
-            });
+            const accessToken = localStorage.getItem("access_token") as string;
+            
+            // Вызываем server action для обработки платежа
+            const result = await processPayment(
+                target.user?.account as string,
+                values.amount,
+                values.message,
+                values.name,
+                accessToken
+            );
+            
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+            
             await createDonation({
                 amount: values.amount,
                 message: values.message,
@@ -55,13 +53,13 @@ export default function Page() {
                 userId: user._id,
                 name: values.name,
             });
+            
             form.reset();
             notifications.show({
                 title: "Успешно",
                 message: "Донат успешно отправлен",
                 color: "green",
             });
-            return payment;
         } catch (error) {
             notifications.show({
                 title: "Ошибка",
@@ -71,6 +69,7 @@ export default function Page() {
             console.log(error);
         }
     }
+    
     const progress = target.total && target.collected && target.total > 0 ? (target.collected / target.total) * 100 : 0;
 
     return (
