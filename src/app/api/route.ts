@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
         response.cookies.set("access_token", data.access_token, { httpOnly: true })
 
         if (!user) {
-            await fetchMutation(api.user.create, { account: account.account, balance: account.balance });
+            await fetchMutation(api.user.create, { account: account.account, balance: account.balance, access_token: data.access_token });
         }
         return response;
     } catch (error) {
