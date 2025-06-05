@@ -63,10 +63,10 @@ export default function Page() {
         } catch (error) {
             notifications.show({
                 title: "Ошибка",
-                message: "Донат не отправлен",
+                message: error instanceof Error ? error.message : "Донат не отправлен",
                 color: "red",
             });
-            console.log(error);
+            console.error(error);
         }
     }
     
