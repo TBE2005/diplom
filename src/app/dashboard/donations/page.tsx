@@ -44,7 +44,7 @@ export default function Page() {
                                         </Badge>
                                     )}
                                 </Group>
-                                <Text fw={700} size="lg">{donation.fromUser?.name}</Text>
+                                <Text fw={700} size="lg">{donation.toUser?.name}</Text>
                                 {donation.message && (
                                     <Text c="dimmed" size="sm">
                                         {donation.message}
@@ -56,7 +56,7 @@ export default function Page() {
                 </Tabs.Panel>
                 <Tabs.Panel value="to" mt="md">
                     {myDonationsTo?.map(donation => (
-                        <Card key={donation._id} withBorder shadow="sm" radius="md" p="md" w="100%">
+                        <Card key={donation._id} withBorder shadow="sm" radius="md" p="md" mt="md" w="100%">
                             <Group justify="space-between" mb="xs">
                                 <Group>
                                     <FaMoneyBillWave size={20} />
@@ -68,7 +68,7 @@ export default function Page() {
                                     </Badge>
                                 )}
                             </Group>
-                            <Text fw={700} size="lg">{donation.toUser?.name}</Text>
+                            <Text fw={700} size="lg">{donation.fromUser?.name}</Text>
                             {donation.message && (
                                 <Text c="dimmed" size="sm">
                                     {donation.message}

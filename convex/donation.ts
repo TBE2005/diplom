@@ -35,7 +35,7 @@ export const getMyDonations = query({
         const users = await ctx.db.query("users").collect();
         return donations.map(donation => ({
             ...donation,
-            fromUser: users.find(user => user._id === donation.fromUserId),
+            toUser: users.find(user => user._id === donation.toUserId),
             target: targets.find(target => target._id === donation.targetId),
         }));
     },
@@ -51,7 +51,7 @@ export const getMyDonationsTo = query({
         const users = await ctx.db.query("users").collect();
         return donations.map(donation => ({
             ...donation,
-            toUser: users.find(user => user._id === donation.toUserId),
+            fromUser: users.find(user => user._id === donation.fromUserId),
             target: targets.find(target => target._id === donation.targetId),
         }));
     },
