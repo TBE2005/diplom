@@ -72,12 +72,26 @@ export const payment = httpAction(async (ctx, request) => {
             },
             body: requestParams.toString()
         });
-        
+
         const requestData = await responsePayment.json();
-        console.log(requestData);
-        if(requestData.status === "refused") {
+        if (requestData.status === "refused") {
             throw new Error(requestData.error);
         }
+        console.log(requestData);
+        const responseProcess = await fetch(`https://yoomoney.ru/api/process-payment?request_id=${requestData.request_id}`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`,
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+        });
+        const processData = await responseProcess.json();
+
+        if (processData.status === "refused") {
+            throw new Error(processData.error);
+        }
+
+        console.log(processData);
         return new Response(JSON.stringify(requestData), {
             status: 200,
             headers: { "Content-Type": "application/json" },

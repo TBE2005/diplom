@@ -32,7 +32,7 @@ export default function Page() {
         try {
             const accessToken = localStorage.getItem("access_token") as string;
 
-            const paymentResult = await fetch("https://scrupulous-ladybug-152.convex.site/payment", {
+            const paymentResult = await fetch("https://sleek-barracuda-414.convex.site/payment", {
                 method: "POST",
                 body: JSON.stringify({
                     targetAccount: target.user?.account as string,

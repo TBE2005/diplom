@@ -1,12 +1,10 @@
 'use client'
-import { Group, NavLink,  Tooltip, ActionIcon, CopyButton } from '@mantine/core';
+import { Group, NavLink } from '@mantine/core';
 import { Burger } from '@mantine/core';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { FaCheck } from 'react-icons/fa';
-import { MdOutlineRequestPage } from "react-icons/md";
 import { useQuery } from 'convex/react';
 import { useEffect, Suspense } from 'react';
 import { api } from '../../../convex/_generated/api';
@@ -48,17 +46,6 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                     <Group>
                         <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
                         <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
-                    </Group>
-                    <Group ml="auto">
-                        <CopyButton value={`https://diplom-liard-three.vercel.app/${user?.account}`} timeout={2000}>
-                            {({ copied, copy }) => (
-                                <Tooltip label={copied ? 'Ссылка скопирована' : 'Ссылка на страницу доната'} withArrow position="right">
-                                    <ActionIcon size={"xl"} color={copied ? 'teal' : ''} variant="light" onClick={copy}>
-                                        {copied ? <FaCheck /> : <MdOutlineRequestPage size={30} />}
-                                    </ActionIcon>
-                                </Tooltip>
-                            )}
-                        </CopyButton>
                     </Group>
                 </Group>
             </AppShell.Header>
