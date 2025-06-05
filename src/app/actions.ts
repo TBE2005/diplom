@@ -29,7 +29,7 @@ export async function processPayment(
         console.log("@ Request payment response:", requestData);
         
         if (requestData.status === "refused") {
-            throw new Error(JSON.stringify(requestData));
+            return { success: false, error: `Payment request refused: ${requestData.error || JSON.stringify(requestData)}` };
         }
 
         // Step 2: Process payment
@@ -50,15 +50,19 @@ export async function processPayment(
             console.log("@ Process payment response:", processData);
             
             if (processData.status === "refused") {
-                throw new Error(JSON.stringify(processData));
+                return { success: false, error: `Payment processing refused: ${processData.error || JSON.stringify(processData)}` };
             }
 
-            return processData;
+            return { success: true, data: processData };
         }
 
-        return requestData;
+        return { success: true, data: requestData };
     } catch (error) {
         console.error("@ Error:", error);
-        return error;
+        // Return a serializable error object
+        return { 
+            success: false, 
+            error: error instanceof Error ? error.message : "Unknown error occurred" 
+        };
     }
 } 
