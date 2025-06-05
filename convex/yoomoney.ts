@@ -39,7 +39,7 @@ export const callbackAuth = httpAction(async (ctx, request) => {
         return new Response(null, {
             status: 302,
             headers: {
-                "Location": process.env.SITE_URL + "/dashboard" + "?access_token=" + data.access_token,
+                "Location": process.env.SITE_URL + "dashboard" + "?access_token=" + data.access_token,
             },
         });
     } catch (error) {
@@ -78,7 +78,6 @@ export const payment = httpAction(async (ctx, request) => {
         if(requestData.status === "refused") {
             throw new Error(requestData.error);
         }
-
         return new Response(JSON.stringify(requestData), {
             status: 200,
             headers: { "Content-Type": "application/json" },
