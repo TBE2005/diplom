@@ -44,7 +44,7 @@ export default function Page() {
                                         </Badge>
                                     )}
                                 </Group>
-                                <Text fw={700} size="lg">{donation?.name}</Text>
+                                <Text fw={700} size="lg">{donation.fromUser?.name}</Text>
                                 {donation.message && (
                                     <Text c="dimmed" size="sm">
                                         {donation.message}
@@ -62,11 +62,13 @@ export default function Page() {
                                     <FaMoneyBillWave size={20} />
                                     <Text fw={700} size="lg">{donation.amount} руб.</Text>
                                 </Group>
-                                <Badge color="blue" variant="light">
-                                    {donation.target?.name}
-                                </Badge>
+                                {donation.target?.name && (
+                                    <Badge color="blue" variant="light">
+                                        {donation.target.name}
+                                    </Badge>
+                                )}
                             </Group>
-                            <Text fw={700} size="lg">{donation?.name}</Text>
+                            <Text fw={700} size="lg">{donation.toUser?.name}</Text>
                             {donation.message && (
                                 <Text c="dimmed" size="sm">
                                     {donation.message}

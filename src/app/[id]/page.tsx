@@ -1,6 +1,6 @@
 'use client'
 import { useParams } from "next/navigation";
-import { Center, TextInput, NumberInput, Textarea, Button, Loader, Text, Paper, Title, Group, Progress } from "@mantine/core";
+import { Center, NumberInput, Textarea, Button, Loader, Text, Paper, Title, Group, Progress } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
@@ -14,7 +14,6 @@ export default function Page() {
     const user = useQuery(api.user.getUserByTargetId, { targetId: id as Id<"targets"> });
     const form = useForm({
         initialValues: {
-            name: "",
             amount: 0,
             message: "",
             targetId: id as Id<"targets">,
@@ -52,7 +51,6 @@ export default function Page() {
                 targetId: values.targetId,
                 fromUserId: user._id,
                 toUserId: target.user?._id as Id<"users">,
-                name: values.name,
             });
 
             form.reset();
@@ -89,7 +87,6 @@ export default function Page() {
                 <Title order={3} mb="md">Поддержать цель</Title>
 
                 <form onSubmit={form.onSubmit(handlePayment)} >
-                    <TextInput label="Имя" {...form.getInputProps("name")} mb="md" />
                     <NumberInput label="Сумма" {...form.getInputProps("amount")} mb="md" />
                     <Textarea label="Сообщение" {...form.getInputProps("message")} mb="md" />
                     <Button loading={form.submitting} type="submit" mt={4} fullWidth>Отправить</Button>

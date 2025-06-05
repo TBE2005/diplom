@@ -8,17 +8,14 @@ export const create = mutation({
         targetId: v.id("targets"),
         fromUserId: v.id("users"),
         toUserId: v.id("users"),
-        name: v.string(),
     },
     handler: async (ctx, args) => {
-
         await ctx.db.insert("donations", {
             amount: args.amount,
             message: args.message,
             targetId: args.targetId,
             fromUserId: args.fromUserId,
             toUserId: args.toUserId,
-            name: args.name,
         });
 
         // update target amount
@@ -35,8 +32,10 @@ export const getMyDonations = query({
         // donations with target
         const donations = await ctx.db.query("donations").filter(q => q.eq(q.field("fromUserId"), args.fromUserId)).collect();
         const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.fromUserId)).collect();
+        const users = await ctx.db.query("users").collect();
         return donations.map(donation => ({
             ...donation,
+            fromUser: users.find(user => user._id === donation.fromUserId),
             target: targets.find(target => target._id === donation.targetId),
         }));
     },
@@ -49,8 +48,10 @@ export const getMyDonationsTo = query({
     handler: async (ctx, args) => {
         const donations = await ctx.db.query("donations").filter(q => q.eq(q.field("toUserId"), args.toUserId)).collect();
         const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.toUserId)).collect();
+        const users = await ctx.db.query("users").collect();
         return donations.map(donation => ({
             ...donation,
+            toUser: users.find(user => user._id === donation.toUserId),
             target: targets.find(target => target._id === donation.targetId),
         }));
     },
