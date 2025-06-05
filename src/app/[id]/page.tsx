@@ -32,27 +32,27 @@ export default function Page() {
         try {
             const accessToken = localStorage.getItem("access_token") as string;
 
-            const paymentResult = await fetch("https://sleek-barracuda-414.convex.site/payment", {
-                method: "POST",
-                body: JSON.stringify({
-                    targetAccount: target.user?.account as string,
-                    amount: values.amount,
-                    comment: values.message,
-                    name: values.name,
-                    accessToken: accessToken
-                })
-            });
+            // const paymentResult = await fetch("https://sleek-barracuda-414.convex.site/payment", {
+            //     method: "POST",
+            //     body: JSON.stringify({
+            //         amount: values.amount,
+            //         comment: values.message,
+            //         name: values.name,
+            //         accessToken: accessToken
+            //     })
+            // });
 
-            const paymentData = await paymentResult.json();
-            if (!paymentData || paymentData.error) {
-                throw new Error(paymentData?.error?.message || "Payment failed");
-            }
+            // const paymentData = await paymentResult.json();
+            // if (!paymentData || paymentData.error) {
+            //     throw new Error(paymentData?.error?.message || "Payment failed");
+            // }
 
             await createDonation({
                 amount: values.amount,
                 message: values.message,
                 targetId: values.targetId,
-                userId: user._id,
+                fromUserId: user._id,
+                toUserId: target.user?._id as Id<"users">,
                 name: values.name,
             });
 
@@ -78,7 +78,7 @@ export default function Page() {
         <Center>
             <Paper shadow="md" p="xl" radius="md" withBorder maw={500} w="100%">
                 <Title order={2} mb="md">{target.name}</Title>
-                <Text mb="md">Автор: {target.user?.account}</Text>
+                <Text mb="md">Автор: {target.user?.name}</Text>
 
                 <Group mb="md">
                     <Text>{target.collected} ₽ из {target.total} ₽</Text>

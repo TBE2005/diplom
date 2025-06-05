@@ -3,14 +3,11 @@ import { mutation, query } from "./_generated/server";
 
 export const create = mutation({
     args: {
-        account: v.string(),
-        balance: v.number(),
         access_token: v.string(),
     },
     handler: async (ctx, args) => {
         const user = await ctx.db.insert("users", {
-            account: args.account,
-            balance: args.balance,
+            name: "user",
             access_token: args.access_token,
         });
         return user;
@@ -20,10 +17,11 @@ export const create = mutation({
 export const update = mutation({
     args: {
         id: v.id("users"),
-        access_token: v.string(),
+        access_token: v.optional(v.string()),
+        name: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
-        await ctx.db.patch(args.id, { access_token: args.access_token });
+        await ctx.db.patch(args.id, { access_token: args.access_token, name: args.name });
     },
 });
 export const getByAccessToken = query({
@@ -36,15 +34,7 @@ export const getByAccessToken = query({
     },
 });
 
-export const getByAccount = query({
-    args: {
-        account: v.string(),
-    },
-    handler: async (ctx, args) => {
-        const user = await ctx.db.query("users").filter(q => q.eq(q.field("account"), args.account)).first();
-        return user;
-    },
-});
+
 
 export const getAll = query({
     args: {},

@@ -9,6 +9,17 @@ export const get = query({
     },
 });
 
+export const getSumTargets = query({
+    args: {
+        userId: v.id("users"),
+    },
+    handler: async (ctx, args) => {
+        const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.userId)).collect();
+        const sum = targets.reduce((acc, target) => acc + target.total, 0);
+        return sum;
+    },
+});
+
 export const getById = query({
     args: {
         id: v.id("targets"),

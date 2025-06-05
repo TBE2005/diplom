@@ -22,8 +22,7 @@ export default defineSchema({
         userId: v.id("users"),
     }),
     users: defineTable({
-        account: v.string(),
-        balance: v.number(),
+        name: v.string(),
         access_token: v.string(),
     }),
     donations: defineTable({
