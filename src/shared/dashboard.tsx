@@ -138,13 +138,17 @@ export default function DashboardContent({ children }: { children: React.ReactNo
                         <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
                         <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
                     </Group>
-                    <Group>
+                    <Group visibleFrom="sm">
                         <Badge>Собрано: {sumTargets}</Badge>
                         <TextInput {...form.getInputProps("name")} />
                     </Group>
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar p="md">
+                <Group hiddenFrom="sm" mb="md">
+                    <Badge>Собрано: {sumTargets}</Badge>
+                    <TextInput {...form.getInputProps("name")} />
+                </Group>
                 {links.map((link) => (
                     <NavLink component={Link} key={link.href} {...link} active={pathname === link.href} />
                 ))}
