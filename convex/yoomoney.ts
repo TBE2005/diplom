@@ -48,13 +48,13 @@ export const callbackAuth = httpAction(async (ctx, request) => {
 
 export const payment = httpAction(async (ctx, request) => {
     const data = await request.json();
-    const { targetAccount, amount, comment, name, accessToken } = data;
+    const { targetAccount, amount, comment, accessToken } = data;
     const requestParams = new URLSearchParams({
         pattern_id: "p2p",
         to: targetAccount,
         amount_due: amount.toFixed(2),
         comment: comment || "",
-        message: name || "",
+        message: comment || "",
     });
 
     try {

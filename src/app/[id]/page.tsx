@@ -31,22 +31,21 @@ export default function Page() {
 
     const handlePayment = async (values: typeof form.values) => {
         try {
-            // const accessToken = localStorage.getItem("access_token") as string;
+            const accessToken = localStorage.getItem("access_token") as string;
 
-            // const paymentResult = await fetch("https://sleek-barracuda-414.convex.site/payment", {
-            //     method: "POST",
-            //     body: JSON.stringify({
-            //         amount: values.amount,
-            //         comment: values.message,
-            //         name: values.name,
-            //         accessToken: accessToken
-            //     })
-            // });
+            const paymentResult = await fetch("https://sleek-barracuda-414.convex.site/payment", {
+                method: "POST",
+                body: JSON.stringify({
+                    amount: values.amount,
+                    comment: values.message,
+                    accessToken: accessToken
+                })
+            });
 
-            // const paymentData = await paymentResult.json();
-            // if (!paymentData || paymentData.error) {
-            //     throw new Error(paymentData?.error?.message || "Payment failed");
-            // }
+            const paymentData = await paymentResult.json();
+            if (!paymentData || paymentData.error) {
+                throw new Error(paymentData?.error?.message || "Payment failed");
+            }
 
             await createDonation({
                 amount: values.amount,
