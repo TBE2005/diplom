@@ -1,12 +1,12 @@
 'use client'
-import { Group, NavLink, Text, TextInput } from '@mantine/core';
+import { Group, NavLink, Text, TextInput, Loader, Center } from '@mantine/core';
 import { Burger } from '@mantine/core';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useMutation, useQuery } from 'convex/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
@@ -23,42 +23,96 @@ const links = [
 
 export default function DashboardContent({ children }: { children: React.ReactNode }) {
     const searchParams = useSearchParams();
-    const accessToken = searchParams.get("access_token");
-    const user = useQuery(api.user.getUserByAccessToken, { accessToken: accessToken || localStorage.getItem("access_token") as string });
+    const [token, setToken] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
-
-    const sumTargets = useQuery(api.target.getSumTargets, { userId: user?._id as Id<"users"> });
     const pathname = usePathname();
+
+    // Get token from searchParams or localStorage
+    useEffect(() => {
+        const accessToken = searchParams.get("access_token");
+        if (accessToken) {
+            setToken(accessToken);
+        } else {
+            const storedToken = localStorage.getItem("access_token");
+            if (storedToken) {
+                setToken(storedToken);
+            } else {
+                // No token found, redirect to login
+                router.push("/");
+            }
+        }
+        setIsLoading(false);
+    }, [searchParams, router]);
+
+    // Only query user data after we have a token
+    const user = useQuery(api.user.getUserByAccessToken, 
+        token ? { accessToken: token } : "skip"
+    );
+
+    // Only query other data after we have user data
+    const sumTargets = useQuery(api.target.getSumTargets, 
+        user?._id ? { userId: user._id as Id<"users"> } : "skip"
+    );
+    
     const updateUser = useMutation(api.user.update);
 
     const form = useForm({
         initialValues: {
-            name: user?.name,
+            name: user?.name || '',
         },
     });
-    const [debouncedValues] = useDebouncedValue(form.values, 500);
+
+    // Update form when user data loads
     useEffect(() => {
-        if (debouncedValues.name !== user?.name) {
-            updateUser({ id: user?._id as Id<"users">, name: debouncedValues.name });
+        if (user?.name) {
+            form.setValues({ name: user.name });
+        }
+    }, [user?.name]);
+
+    const [debouncedValues] = useDebouncedValue(form.values, 500);
+    
+    useEffect(() => {
+        if (user?._id && debouncedValues.name !== user?.name && debouncedValues.name !== '') {
+            updateUser({ id: user._id as Id<"users">, name: debouncedValues.name });
             notifications.show({
                 title: "Успешно",
                 message: "Имя обновлено",
                 color: "green",
             });
         }
-    }, [debouncedValues]);
+    }, [debouncedValues, user]);
+
     useEffect(() => {
-        if (!accessToken && !user?._id) {
-            router.push("/");
+        if (token && user?._id) {
+            localStorage.setItem("access_token", token);
+            localStorage.setItem("user_id", user._id as string);
+            
+            // If we came from a redirect with access_token in URL, clean it up
+            if (searchParams.get("access_token")) {
+                router.push("/dashboard");
+            }
         }
-        if (accessToken && user?._id) {
-            localStorage.setItem("access_token", accessToken);
-            localStorage.setItem("user_id", user?._id as Id<"users">);
-            router.push("/dashboard");
-        }
-    }, [searchParams]);
+    }, [token, user?._id, router, searchParams]);
+
+    if (isLoading) {
+        return (
+            <Center style={{ height: '100vh' }}>
+                <Loader size="xl" />
+            </Center>
+        );
+    }
+
+    if (!token || !user) {
+        return (
+            <Center style={{ height: '100vh' }}>
+                <Loader size="xl" />
+            </Center>
+        );
+    }
+
     return (
         <AppShell
             header={{ height: 70 }}
