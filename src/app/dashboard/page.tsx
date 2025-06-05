@@ -65,6 +65,7 @@ export default function Page() {
                     <Tabs.Tab value="my">Мои цели</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value="all">
+                    <Grid>
                     {targetsWithUsers.map((target) => {
                         const progress = target.total > 0 ? (target.collected / target.total) * 100 : 0;
 
@@ -95,6 +96,7 @@ export default function Page() {
                             </Grid.Col>
                         );
                     })}
+                    </Grid>
                 </Tabs.Panel>
                 <Tabs.Panel value="my">
                     <SimpleGrid mt={'md'} cols={{ sm: 1, md: 2, lg: 3 }}
