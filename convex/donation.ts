@@ -18,6 +18,10 @@ export const create = mutation({
             userId: args.userId,
             name: args.name,
         });
+
+        // update target amount
+        const target = await ctx.db.get(args.targetId);
+        if (target) await ctx.db.patch(args.targetId, { collected: target.collected + args.amount });
     },
 });
 
