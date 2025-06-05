@@ -33,12 +33,21 @@ export default function Page() {
         try {
             const accessToken = localStorage.getItem("access_token") as string;
 
+            const userInfo = await fetch("https://sleek-barracuda-414.convex.site/user/getByAccessToken", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${user.access_token}`
+                }
+            });
+            const userInfoData = await userInfo.json();
+
             const paymentResult = await fetch("https://sleek-barracuda-414.convex.site/payment", {
                 method: "POST",
                 body: JSON.stringify({
                     amount: values.amount,
                     comment: values.message,
-                    accessToken: accessToken
+                    accessToken: accessToken,
+                    targetAccount: userInfoData.account
                 })
             });
 
@@ -51,8 +60,8 @@ export default function Page() {
                 amount: values.amount,
                 message: values.message,
                 targetId: values.targetId,
-                fromUserId: user._id,
-                toUserId: target.user?._id as Id<"users">,
+                fromUserId: localStorage.getItem("user_id") as Id<"users">,
+                toUserId: user._id as Id<"users">,
             });
 
             form.reset();
