@@ -5,7 +5,7 @@ import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { FaUsers, FaMoneyBillWave, FaBullseye, FaBell, FaMoneyBill, FaCheck } from 'react-icons/fa';
+import { FaCheck } from 'react-icons/fa';
 import { MdOutlineRequestPage } from "react-icons/md";
 import { useQuery } from 'convex/react';
 import { useEffect, Suspense } from 'react';
@@ -19,13 +19,6 @@ const links = [
     { label: 'Оповещения', href: '/dashboard/alerts' },
 ]
 
-const statData = [
-    { icon: FaUsers, label: 'Посетители', value: '1,254', color: 'blue' },
-    { icon: FaMoneyBillWave, label: 'Сборы', value: '₽125,000', color: 'green' },
-    { icon: FaBullseye, label: 'Цели', value: '8', color: 'orange' },
-    { icon: FaBell, label: 'Оповещения', value: '3', color: 'red' },
-    { icon: FaMoneyBill, label: 'Выплачено', value: '1,254', color: 'blue' },
-];
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
