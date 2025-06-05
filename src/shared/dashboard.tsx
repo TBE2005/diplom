@@ -35,6 +35,8 @@ export default function DashboardContent({ children }: { children: React.ReactNo
         const accessToken = searchParams.get("access_token");
         if (accessToken) {
             setToken(accessToken);
+            // Если токен получен из URL, сохраняем его сразу
+            localStorage.setItem("access_token", accessToken);
         } else {
             const storedToken = localStorage.getItem("access_token");
             if (storedToken) {
@@ -51,6 +53,13 @@ export default function DashboardContent({ children }: { children: React.ReactNo
     const user = useQuery(api.user.getUserByAccessToken, 
         token ? { accessToken: token } : "skip"
     );
+
+    // Сохраняем user_id в localStorage как только получим данные пользователя
+    useEffect(() => {
+        if (user?._id) {
+            localStorage.setItem("user_id", user._id as string);
+        }
+    }, [user?._id]);
 
     // Only query other data after we have user data
     const sumTargets = useQuery(api.target.getSumTargets, 
@@ -88,7 +97,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
     useEffect(() => {
         if (token && user?._id) {
             localStorage.setItem("access_token", token);
-            localStorage.setItem("user_id", user._id as string);
+            // Удаляем дублирование, так как теперь user_id сохраняется в отдельном useEffect
             
             // If we came from a redirect with access_token in URL, clean it up
             if (searchParams.get("access_token")) {
