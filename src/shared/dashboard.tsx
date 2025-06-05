@@ -3,7 +3,7 @@ import { Group, NavLink, Text, TextInput } from '@mantine/core';
 import { Burger } from '@mantine/core';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useMutation, useQuery } from 'convex/react';
 import { useEffect } from 'react';
@@ -11,7 +11,7 @@ import { useForm } from '@mantine/form';
 import { useDebouncedValue } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { api } from '../../convex/_generated/api';
-import { Doc, Id } from '../../convex/_generated/dataModel';
+import { Id } from '../../convex/_generated/dataModel';
 
 const links = [
     { label: 'Цели', href: '/dashboard' },
@@ -21,12 +21,18 @@ const links = [
 ]
 
 
-export default function DashboardContent({ children, user }: { children: React.ReactNode, user: Doc<"users"> }) {
+export default function DashboardContent({ children }: { children: React.ReactNode }) {
+    const searchParams = useSearchParams();
+    const accessToken = searchParams.get("access_token");
+    const user = useQuery(api.user.getUserByAccessToken, { accessToken: accessToken || localStorage.getItem("access_token") as string });
+    const router = useRouter();
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
     const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
+
     const sumTargets = useQuery(api.target.getSumTargets, { userId: user?._id as Id<"users"> });
     const pathname = usePathname();
     const updateUser = useMutation(api.user.update);
+
     const form = useForm({
         initialValues: {
             name: user?.name,
@@ -44,8 +50,15 @@ export default function DashboardContent({ children, user }: { children: React.R
         }
     }, [debouncedValues]);
     useEffect(() => {
-        localStorage.setItem("user_id", user?._id as Id<"users">);
-    }, [user]);
+        if (!accessToken && !user?._id) {
+            router.push("/");
+        }
+        if (accessToken && user?._id) {
+            localStorage.setItem("access_token", accessToken);
+            localStorage.setItem("user_id", user?._id as Id<"users">);
+            router.push("/dashboard");
+        }
+    }, [searchParams]);
     return (
         <AppShell
             header={{ height: 70 }}
