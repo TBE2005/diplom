@@ -57,7 +57,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                         <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
                     </Group>
 
-                    <Group >
+                    {/* <Group >
                         {statData.map((stat, index) => (
                             <Card key={index} withBorder w={100} h={50} p={5} m={0}>
                                 <Group p={0} m={0} gap={2}>
@@ -67,7 +67,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                                 <Text size="xs" c="dimmed">{stat.label}</Text>
                             </Card>
                         ))}
-                    </Group>
+                    </Group> */}
                     <Group ml="auto">
                         <CopyButton value={`https://diplom-liard-three.vercel.app/${user?.account}`} timeout={2000}>
                             {({ copied, copy }) => (
