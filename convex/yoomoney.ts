@@ -74,7 +74,6 @@ export const payment = httpAction(async (ctx, request) => {
         });
 
         const requestData = await responsePayment.json();
-        console.log("requestData", requestData);
         if (requestData.status === "refused") {
             throw new Error(requestData.error);
         }
@@ -90,12 +89,11 @@ export const payment = httpAction(async (ctx, request) => {
             body: requestParamsProcess.toString(),
         });
         const processData = await responseProcess.json();
-        console.log("processData", processData);
         if (processData.status === "refused") {
             throw new Error(processData.error);
         }
 
-        return new Response(JSON.stringify(requestData), {
+        return new Response(JSON.stringify(processData), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });

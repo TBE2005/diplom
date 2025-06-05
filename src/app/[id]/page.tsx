@@ -89,11 +89,11 @@ export default function Page() {
 
                 <Title order={3} mb="md">Поддержать цель</Title>
 
-                <form onSubmit={form.onSubmit(handlePayment)}>
+                <form onSubmit={form.onSubmit(handlePayment)} >
                     <TextInput label="Имя" {...form.getInputProps("name")} mb="md" />
                     <NumberInput label="Сумма" {...form.getInputProps("amount")} mb="md" />
                     <Textarea label="Сообщение" {...form.getInputProps("message")} mb="md" />
-                    <Button type="submit" mt={4} fullWidth>Отправить</Button>
+                    <Button loading={form.submitting} type="submit" mt={4} fullWidth>Отправить</Button>
                 </form>
             </Paper>
         </Center>
