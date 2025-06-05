@@ -31,7 +31,7 @@ export const getMyDonations = query({
     handler: async (ctx, args) => {
         // donations with target
         const donations = await ctx.db.query("donations").filter(q => q.eq(q.field("fromUserId"), args.fromUserId)).collect();
-        const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.fromUserId)).collect();
+        const targets = await ctx.db.query("targets").collect();
         const users = await ctx.db.query("users").collect();
         return donations.map(donation => ({
             ...donation,
