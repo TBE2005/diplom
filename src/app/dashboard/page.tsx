@@ -59,7 +59,7 @@ export default function Page() {
 
     const targetsWithUsers = allTargets.map((target: Target) => ({
         ...target,
-        user: allUsers.find((user: User) => user._id === target.userId)
+        user: allUsers.find((user: Doc<"users">) => user._id === target.userId)
     }));
     return (
         <>
@@ -82,7 +82,7 @@ export default function Page() {
                                         <Group justify="space-between">
                                             <Text fw={500}>{target.name}</Text>
                                             <Text size="sm" c="dimmed">
-                                                {target.user?.account || "Неизвестный пользователь"}
+                                                {target.user?.name}
                                             </Text>
                                         </Group>
                                     </Card.Section>
