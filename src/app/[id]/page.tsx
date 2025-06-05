@@ -29,17 +29,21 @@ export default function Page() {
         </Center>
     }
 
-    const payment = async (values: typeof form.values) => {
+    const handlePayment = async (values: typeof form.values) => {
         try {
             const accessToken = localStorage.getItem("access_token") as string;
 
-            await processPayment(
+            const paymentResult = await processPayment(
                 target.user?.account as string,
                 values.amount,
                 values.message,
                 values.name,
                 accessToken
             );
+            
+            if (!paymentResult || paymentResult.error) {
+                throw new Error(paymentResult?.error?.message || "Payment failed");
+            }
 
             await createDonation({
                 amount: values.amount,
@@ -82,7 +86,7 @@ export default function Page() {
 
                 <Title order={3} mb="md">Поддержать цель</Title>
 
-                <form onSubmit={form.onSubmit(payment)}>
+                <form onSubmit={form.onSubmit(handlePayment)}>
                     <TextInput label="Имя" {...form.getInputProps("name")} mb="md" />
                     <NumberInput label="Сумма" {...form.getInputProps("amount")} mb="md" />
                     <Textarea label="Сообщение" {...form.getInputProps("message")} mb="md" />
