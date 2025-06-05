@@ -9,6 +9,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         method: "GET",
     });
     const userData = await user.json();
+    console.log("userData", userData);
     if (!userData) {
         redirect("/");
     }
