@@ -6,8 +6,11 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
 import { notifications } from "@mantine/notifications";
+import { useRouter } from "next/navigation";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function Page() {
+    const router = useRouter();
     const { id } = useParams();
     const target = useQuery(api.target.getById, { id: id as Id<"targets"> });
     const createDonation = useMutation(api.donation.create);
@@ -72,7 +75,8 @@ export default function Page() {
     const progress = target.total && target.collected && target.total > 0 ? (target.collected / target.total) * 100 : 0;
 
     return (
-        <Center>
+        <Center h="100vh" w="100vw" bg="gray.1">
+            <Button onClick={() => router.back()} mb="md" rightSection={<FaArrowLeft />} variant="outline">Назад</Button>
             <Paper shadow="md" p="xl" radius="md" withBorder maw={500} w="100%">
                 <Title order={2} mb="md">{target.name}</Title>
                 <Text mb="md">Автор: {target.user?.name}</Text>
