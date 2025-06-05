@@ -1,5 +1,5 @@
 'use client'
-import { Group, NavLink, Card, Text, Tooltip, ActionIcon, CopyButton } from '@mantine/core';
+import { Group, NavLink,  Tooltip, ActionIcon, CopyButton } from '@mantine/core';
 import { Burger } from '@mantine/core';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -56,18 +56,6 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
                         <Burger opened={mobileOpened} onClick={toggleMobile} hiddenFrom="sm" size="sm" />
                         <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
                     </Group>
-
-                    {/* <Group >
-                        {statData.map((stat, index) => (
-                            <Card key={index} withBorder w={100} h={50} p={5} m={0}>
-                                <Group p={0} m={0} gap={2}>
-                                    <stat.icon style={{ color: `var(--mantine-color-${stat.color}-6)` }} />
-                                    <Text c={stat.color}>{stat.value}</Text>
-                                </Group>
-                                <Text size="xs" c="dimmed">{stat.label}</Text>
-                            </Card>
-                        ))}
-                    </Group> */}
                     <Group ml="auto">
                         <CopyButton value={`https://diplom-liard-three.vercel.app/${user?.account}`} timeout={2000}>
                             {({ copied, copy }) => (
