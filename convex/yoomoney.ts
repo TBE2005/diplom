@@ -64,13 +64,13 @@ export const payment = httpAction(async (ctx, request) => {
     });
 
     try {
-        const responsePayment = await fetch(`https://yoomoney.ru/api/request-payment` + "?" + requestParams.toString(), {
+        const responsePayment = await fetch(`https://yoomoney.ru/api/request-payment`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: requestParams.toString()
+            body: requestParams.toString(),
         });
 
         const requestData = await responsePayment.json();
