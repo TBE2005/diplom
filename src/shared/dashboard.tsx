@@ -43,6 +43,9 @@ export default function DashboardContent({ children, user }: { children: React.R
             });
         }
     }, [debouncedValues]);
+    useEffect(() => {
+        localStorage.setItem("user_id", user?._id as Id<"users">);
+    }, [user]);
     return (
         <AppShell
             header={{ height: 70 }}
