@@ -30,7 +30,7 @@ export default function Page() {
 
     const handlePayment = async (values: typeof form.values) => {
         try {
-            const accessToken = localStorage.getItem("access_token") as string;
+            // const accessToken = localStorage.getItem("access_token") as string;
 
             // const paymentResult = await fetch("https://sleek-barracuda-414.convex.site/payment", {
             //     method: "POST",
