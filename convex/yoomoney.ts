@@ -33,7 +33,6 @@ export const callbackAuth = httpAction(async (ctx, request) => {
             status: 302,
             headers: {
                 "Location": "https://diplom-liard-three.vercel.app/dashboard" + "?access_token=" + data.access_token,
-                "Set-Cookie": `access_token=${data.access_token}; Path=/; HttpOnly; SameSite=Strict`,
             },
         });
     } catch (error) {
