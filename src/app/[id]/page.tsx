@@ -6,7 +6,6 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
 import { notifications } from "@mantine/notifications";
-import { processPayment } from "../actions";
 
 export default function Page() {
     const { id } = useParams();
@@ -33,16 +32,20 @@ export default function Page() {
         try {
             const accessToken = localStorage.getItem("access_token") as string;
 
-            const paymentResult = await processPayment(
-                target.user?.account as string,
-                values.amount,
-                values.message,
-                values.name,
-                accessToken
-            );
-            
-            if (!paymentResult || paymentResult.error) {
-                throw new Error(paymentResult?.error?.message || "Payment failed");
+            const paymentResult = await fetch("https://scrupulous-ladybug-152.convex.site/payment", {
+                method: "POST",
+                body: JSON.stringify({
+                    targetAccount: target.user?.account as string,
+                    amount: values.amount,
+                    comment: values.message,
+                    name: values.name,
+                    accessToken: accessToken
+                })
+            });
+
+            const paymentData = await paymentResult.json();
+            if (!paymentData || paymentData.error) {
+                throw new Error(paymentData?.error?.message || "Payment failed");
             }
 
             await createDonation({

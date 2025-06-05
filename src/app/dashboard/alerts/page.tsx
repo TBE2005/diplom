@@ -44,7 +44,13 @@ export default function Page() {
 
 function AlertCard(initialValues: Doc<"alerts">) {
     const form = useForm({
-        initialValues,
+        initialValues: {
+            _id: initialValues._id,
+            _creationTime: initialValues._creationTime,
+            backgroundColor: initialValues.backgroundColor,
+            textColor: initialValues.textColor ,
+            userId: initialValues.userId,
+        },
     });
     const updateAlert = useMutation(api.alert.update);
     const deleteAlert = useMutation(api.alert.remove);

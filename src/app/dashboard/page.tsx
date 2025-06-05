@@ -52,7 +52,15 @@ export default function Page() {
 
 function GoalCard(initialValues: Doc<"targets"> & { alerts: Doc<"alerts">[], goals: Doc<"goals">[] }) {
     const form = useForm({
-        initialValues,
+        initialValues: {
+            _id: initialValues._id,
+            _creationTime: initialValues._creationTime,
+            name: initialValues.name,
+            collected: initialValues.collected,
+            total: initialValues.total,
+            goalId: initialValues.goalId ,
+            alertId: initialValues.alertId,
+        },
     });
 
     const [debouncedValues] = useDebouncedValue(form.values, 500);

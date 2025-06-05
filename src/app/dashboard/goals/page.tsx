@@ -44,8 +44,18 @@ export default function Page() {
 }
 
 function GoalCard(initialValues: Doc<"goals">) {
+    // Create a new mutable object with the properties we need
+    const formInitialValues = {
+        _id: initialValues._id,
+        _creationTime: initialValues._creationTime,
+        backgroundColor: initialValues.backgroundColor,
+        indicatorColor: initialValues.indicatorColor,
+        textColor: initialValues.textColor,
+        userId: initialValues.userId,
+    };
+
     const form = useForm({
-        initialValues,
+        initialValues: formInitialValues,
     });
 
     const updateGoal = useMutation(api.goal.update);
