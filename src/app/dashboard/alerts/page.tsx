@@ -9,7 +9,9 @@ import { useEffect } from "react";
 import { AlertTemplate } from "@/components/alert-template";
 import { notifications } from '@mantine/notifications';
 export default function Page() {
-    const alerts = useQuery(api.alert.get);
+    const alerts = useQuery(api.alert.byUserId, {
+        userId: localStorage.getItem("user_id") as Id<"users">
+    });
     const createAlert = useMutation(api.alert.create);
     return (
         <>

@@ -9,7 +9,9 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { GoalTemplate } from "@/components/goal-template";
 import { notifications } from '@mantine/notifications';
 export default function Page() {
-    const goals = useQuery(api.goal.get);
+    const goals = useQuery(api.goal.byUserId, {
+        userId: localStorage.getItem("user_id") as Id<"users">
+    });
     const createGoal = useMutation(api.goal.create);
     return (
         <>

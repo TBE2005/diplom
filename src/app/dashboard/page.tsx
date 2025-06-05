@@ -13,9 +13,15 @@ import { api } from "../../../convex/_generated/api";
 import { Doc, Id } from "../../../convex/_generated/dataModel";
 import { notifications } from '@mantine/notifications';
 export default function Page() {
-    const targets = useQuery(api.target.get);
-    const alerts = useQuery(api.alert.get);
-    const goals = useQuery(api.goal.get);
+    const targets = useQuery(api.target.byUserId, {
+        userId: localStorage.getItem("user_id") as Id<"users">
+    });
+    const alerts = useQuery(api.alert.byUserId, {
+        userId: localStorage.getItem("user_id") as Id<"users">
+    });
+    const goals = useQuery(api.goal.byUserId, {
+        userId: localStorage.getItem("user_id") as Id<"users">
+    });
 
     const createTarget = useMutation(api.target.create);
     return (
