@@ -31,7 +31,8 @@ export default defineSchema({
         amount: v.number(),
         message: v.string(),
         targetId: v.id("targets"),
-        userId: v.id("users"),
+        fromUserId: v.id("users"),
+        toUserId: v.id("users"),
     }),
 });
 

@@ -10,8 +10,7 @@ import { useEffect, Suspense } from 'react';
 import { api } from '../../../convex/_generated/api';
 
 const links = [
-    { label: 'Мои цели', href: '/dashboard' },
-    { label: 'Цели', href: '/dashboard/targets' },
+    { label: 'Цели', href: '/dashboard' },
     { label: 'Донаты', href: '/dashboard/donations' },
     { label: 'Сборы', href: '/dashboard/goals' },
     { label: 'Оповещения', href: '/dashboard/alerts' },

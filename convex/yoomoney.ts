@@ -58,7 +58,7 @@ export const payment = httpAction(async (ctx, request) => {
     const requestParams = new URLSearchParams({
         pattern_id: "p2p",
         to: targetAccount,
-        amount: amount.toFixed(2),
+        amount_due: amount.toFixed(2),
         comment: comment || "",
         message: name || "",
     });

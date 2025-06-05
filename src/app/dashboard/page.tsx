@@ -1,5 +1,5 @@
 'use client'
-import { ActionIcon, Button, Card, CopyButton, NumberInput, Radio, SimpleGrid,TextInput, Tooltip, Skeleton } from "@mantine/core";
+import { ActionIcon, Button, Card, CopyButton, NumberInput, Radio, SimpleGrid, Text, TextInput, Tooltip, Skeleton, Center, Loader, Group, Grid, Progress } from "@mantine/core";
 import { Carousel } from '@mantine/carousel';
 import { useForm } from '@mantine/form';
 import { useDebouncedValue } from '@mantine/hooks';
@@ -12,7 +12,28 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Doc, Id } from "../../../convex/_generated/dataModel";
 import { notifications } from '@mantine/notifications';
+import { Tabs } from '@mantine/core';
+import { useRouter } from "next/navigation";
+
+interface User {
+    _id: Id<"users">;
+    account: string;
+    balance: number;
+}
+
+interface Target {
+    _id: Id<"targets">;
+    name: string;
+    collected: number;
+    total: number;
+    userId: Id<"users">;
+    goalId?: Id<"goals">;
+    alertId?: Id<"alerts">;
+}
+
+
 export default function Page() {
+    const router = useRouter();
     const targets = useQuery(api.target.byUserId, {
         userId: localStorage.getItem("user_id") as Id<"users">
     });
@@ -23,34 +44,91 @@ export default function Page() {
         userId: localStorage.getItem("user_id") as Id<"users">
     });
 
+    const allTargets = useQuery(api.target.get);
+    const allUsers = useQuery(api.user.getAll);
+
     const createTarget = useMutation(api.target.create);
+
+
+
+    if (!targets || !alerts || !goals || !allTargets || !allUsers) {
+        return <Center>
+            <Loader />
+        </Center>
+    }
+
+    const targetsWithUsers = allTargets.map((target: Target) => ({
+        ...target,
+        user: allUsers.find((user: User) => user._id === target.userId)
+    }));
     return (
         <>
             <Button onClick={() => createTarget({
                 userId: localStorage.getItem("user_id") as Id<"users">
             })}>Новая цель</Button>
-            <SimpleGrid mt={'md'} cols={{ sm: 1, md: 2, lg: 3 }}
-                spacing={{ base: 10, sm: 'xl' }}
-                verticalSpacing={{ base: 'md', sm: 'xl' }}>
-                {targets ? targets?.map((target) => (
-                    <GoalCard key={target._id} {...target} alerts={alerts ?? []} goals={goals ?? []} />
-                )) : (
-                    <>
-                        {[1, 2, 3].map((i) => (
-                            <Card key={i} shadow="sm" padding="lg" radius="md" withBorder>
-                                <SimpleGrid cols={2} mt="md">
-                                    <Skeleton height={36} width="70%" />
-                                    <Skeleton height={36} width="30%" ml="auto" />
-                                    <Skeleton height={36} mt="sm" />
-                                    <Skeleton height={36} mt="sm" />
-                                </SimpleGrid>
-                                <Skeleton height={150} mt="md" radius="md" />
-                                <Skeleton height={150} mt="md" radius="md" />
-                            </Card>
-                        ))}
-                    </>
-                )}
-            </SimpleGrid>
+            <Tabs defaultValue="all">
+                <Tabs.List>
+                    <Tabs.Tab value="all">Все цели</Tabs.Tab>
+                    <Tabs.Tab value="my">Мои цели</Tabs.Tab>
+                </Tabs.List>
+                <Tabs.Panel value="all">
+                    {targetsWithUsers.map((target) => {
+                        const progress = target.total > 0 ? (target.collected / target.total) * 100 : 0;
+
+                        return (
+                            <Grid.Col span={{ base: 12, sm: 6, md: 4 }} key={target._id}>
+                                <Card shadow="sm" padding="lg" radius="md" withBorder onClick={() => router.push(`/${target._id}`)} style={{ cursor: 'pointer' }}>
+                                    <Card.Section withBorder inheritPadding py="xs">
+                                        <Group justify="space-between">
+                                            <Text fw={500}>{target.name}</Text>
+                                            <Text size="sm" c="dimmed">
+                                                {target.user?.account || "Неизвестный пользователь"}
+                                            </Text>
+                                        </Group>
+                                    </Card.Section>
+
+                                    <Group mt="md" mb="xs">
+                                        <Text>
+                                            {target.collected} ₽ из {target.total} ₽
+                                        </Text>
+                                    </Group>
+
+                                    <Progress value={progress} size="md" radius="xl" />
+
+                                    <Button variant="light" color="blue" fullWidth mt="md" radius="md" onClick={() => router.push(`/${target._id}`)}>
+                                        Пожертвовать
+                                    </Button>
+                                </Card>
+                            </Grid.Col>
+                        );
+                    })}
+                </Tabs.Panel>
+                <Tabs.Panel value="my">
+                    <SimpleGrid mt={'md'} cols={{ sm: 1, md: 2, lg: 3 }}
+                        spacing={{ base: 10, sm: 'xl' }}
+                        verticalSpacing={{ base: 'md', sm: 'xl' }}>
+                        {targets ? targets?.map((target) => (
+                            <GoalCard key={target._id} {...target} alerts={alerts ?? []} goals={goals ?? []} />
+                        )) : (
+                            <>
+                                {[1, 2, 3].map((i) => (
+                                    <Card key={i} shadow="sm" padding="lg" radius="md" withBorder>
+                                        <SimpleGrid cols={2} mt="md">
+                                            <Skeleton height={36} width="70%" />
+                                            <Skeleton height={36} width="30%" ml="auto" />
+                                            <Skeleton height={36} mt="sm" />
+                                            <Skeleton height={36} mt="sm" />
+                                        </SimpleGrid>
+                                        <Skeleton height={150} mt="md" radius="md" />
+                                        <Skeleton height={150} mt="md" radius="md" />
+                                    </Card>
+                                ))}
+                            </>
+                        )}
+                    </SimpleGrid>
+                </Tabs.Panel>
+            </Tabs>
+
         </>
     )
 }
@@ -64,7 +142,7 @@ function GoalCard(initialValues: Doc<"targets"> & { alerts: Doc<"alerts">[], goa
             name: initialValues.name,
             collected: initialValues.collected,
             total: initialValues.total,
-            goalId: initialValues.goalId ,
+            goalId: initialValues.goalId,
             alertId: initialValues.alertId,
         },
     });

@@ -6,16 +6,18 @@ export const create = mutation({
         amount: v.number(),
         message: v.string(),
         targetId: v.id("targets"),
-        userId: v.id("users"),
+        fromUserId: v.id("users"),
+        toUserId: v.id("users"),
         name: v.string(),
     },
     handler: async (ctx, args) => {
-        
+
         await ctx.db.insert("donations", {
             amount: args.amount,
             message: args.message,
             targetId: args.targetId,
-            userId: args.userId,
+            fromUserId: args.fromUserId,
+            toUserId: args.toUserId,
             name: args.name,
         });
 
@@ -25,14 +27,28 @@ export const create = mutation({
     },
 });
 
-export const getByUserId = query({
+export const getMyDonations = query({
     args: {
-        userId: v.id("users"),
+        fromUserId: v.id("users"),
     },
     handler: async (ctx, args) => {
         // donations with target
-        const donations = await ctx.db.query("donations").filter(q => q.eq(q.field("userId"), args.userId)).collect();
-        const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.userId)).collect();
+        const donations = await ctx.db.query("donations").filter(q => q.eq(q.field("fromUserId"), args.fromUserId)).collect();
+        const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.fromUserId)).collect();
+        return donations.map(donation => ({
+            ...donation,
+            target: targets.find(target => target._id === donation.targetId),
+        }));
+    },
+});
+
+export const getMyDonationsTo = query({
+    args: {
+        toUserId: v.id("users"),
+    },
+    handler: async (ctx, args) => {
+        const donations = await ctx.db.query("donations").filter(q => q.eq(q.field("toUserId"), args.toUserId)).collect();
+        const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.toUserId)).collect();
         return donations.map(donation => ({
             ...donation,
             target: targets.find(target => target._id === donation.targetId),
