@@ -9,7 +9,7 @@ import { Tabs } from '@mantine/core';
 export default function Page() {
     const myDonations = useQuery(api.donation.getMyDonations, { fromUserId: localStorage.getItem("user_id") as Id<"users"> });
     const myDonationsTo = useQuery(api.donation.getMyDonationsTo, { toUserId: localStorage.getItem("user_id") as Id<"users"> });
-
+    console.log(myDonations)
     if (!myDonations) {
         return <Center>
             <Loader />
