@@ -58,6 +58,7 @@ export async function processPayment(
 
         return requestData;
     } catch (error) {
+        console.error("@ Error:", error);
         return error;
     }
 } 
