@@ -95,13 +95,25 @@ export const payment = httpAction(async (ctx, request) => {
 
         return new Response(JSON.stringify(processData), {
             status: 200,
-            headers: { "Content-Type": "application/json" },
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Vary": "Origin",
+            }),
         });
     } catch (error) {
         console.log(error);
         return new Response(JSON.stringify({ error: String(error) }), {
             status: 500,
-            headers: { "Content-Type": "application/json" },
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Vary": "Origin",
+            }),
         });
     }
 });
