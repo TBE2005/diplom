@@ -10,6 +10,8 @@ import { MdOutlineRequestPage } from "react-icons/md";
 import { useQuery } from 'convex/react';
 import { useEffect } from 'react';
 import { api } from '../../../convex/_generated/api';
+import { Suspense } from 'react'
+
 
 const links = [
     { label: 'Мои цели', href: '/dashboard' },
@@ -84,6 +86,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <NavLink component={Link} key={link.href} {...link} active={pathname === link.href} />
             ))}
         </AppShell.Navbar>
-        <AppShell.Main>{children}</AppShell.Main>
+        <AppShell.Main>
+            <Suspense fallback={<div>Loading...</div>}>
+                {children}
+            </Suspense>
+        </AppShell.Main>
     </AppShell >;
 }
