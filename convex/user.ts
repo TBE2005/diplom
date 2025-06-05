@@ -1,7 +1,6 @@
 import { v } from "convex/values";
-import { httpAction, mutation, query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
-import { api } from "./_generated/api";
 
 export const create = mutation({
     args: {
@@ -34,25 +33,6 @@ export const getAll = query({
     },
 });
 
-export const getInfoByAccessToken = httpAction(async (ctx, request) => {
-    const url = new URL(request.url);
-    const accessToken = url.searchParams.get("access_token");
-    const response = await fetch("https://yoomoney.ru/api/account-info", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${accessToken}`,
-        },
-    });
-    const user = await response.json();
-    const userData = await ctx.runQuery(api.user.getUserByAccessToken, { accessToken: accessToken as string });
-    if (userData?._id) {
-        return new Response(JSON.stringify({
-            ...user,
-            ...userData,
-        }), { status: 200, headers: { "Content-Type": "application/json" } });
-    }
-    return new Response(JSON.stringify({ error: "User not found" }), { status: 404 });
-});
 
 export const getUserByTargetId = query({
     args: {
