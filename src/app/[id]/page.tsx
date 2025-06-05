@@ -33,8 +33,7 @@ export default function Page() {
         try {
             const accessToken = localStorage.getItem("access_token") as string;
 
-            // Вызываем server action для обработки платежа
-            const result = await processPayment(
+            await processPayment(
                 target.user?.account as string,
                 values.amount,
                 values.message,

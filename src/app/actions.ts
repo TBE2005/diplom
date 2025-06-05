@@ -1,11 +1,5 @@
 'use server'
 
-interface PaymentResponse {
-    success: boolean;
-    error?: string;
-    data?: Record<string, any>;
-}
-
 export async function processPayment(
     targetAccount: string,
     amount: number,
@@ -32,7 +26,9 @@ export async function processPayment(
         });
         const requestData = await requestResponse.json();
         console.log(1, requestData);
+        return requestData;
     } catch (error) {
         console.error(2, error);
+        throw error;
     }
 } 
