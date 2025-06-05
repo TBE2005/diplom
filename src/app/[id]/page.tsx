@@ -10,9 +10,8 @@ import { notifications } from "@mantine/notifications";
 export default function Page() {
     const { id } = useParams();
     const target = useQuery(api.target.getById, { id: id as Id<"targets"> });
-    const user = useQuery(api.user.getByAccessToken, { access_token: localStorage.getItem("access_token") as string });
     const createDonation = useMutation(api.donation.create);
-
+    const user = useQuery(api.user.getUserByTargetId, { targetId: id as Id<"targets"> });
     const form = useForm({
         initialValues: {
             name: "",

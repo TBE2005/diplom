@@ -13,14 +13,17 @@ export const callbackAuth = httpAction(async (ctx, request) => {
         );
         const data = await responseToken.json();
 
-        const user = await ctx.runQuery(api.user.getByAccessToken, { access_token: data.access_token });
-        if (!user) {
+        const user = await fetch("https://sleek-barracuda-414.convex.site/user/getByAccessToken?access_token=" + data.access_token, {
+            method: "GET",
+        });
+        const userData = await user.json();
+        if (!userData) {
             await ctx.runMutation(api.user.create, {
                 access_token: data.access_token,
             });
         } else {
             await ctx.runMutation(api.user.update, {
-                id: user._id,
+                id: userData._id,
                 access_token: data.access_token,
             });
         }
@@ -30,6 +33,7 @@ export const callbackAuth = httpAction(async (ctx, request) => {
             status: 302,
             headers: {
                 "Location": "https://diplom-liard-three.vercel.app/dashboard" + "?access_token=" + data.access_token,
+                "Set-Cookie": `access_token=${data.access_token}; Path=/; HttpOnly; SameSite=Strict`,
             },
         });
     } catch (error) {

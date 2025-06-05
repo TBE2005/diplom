@@ -1,6 +1,7 @@
 import { httpRouter } from "convex/server";
 import { callbackAuth, payment } from "./yoomoney";
 import { httpAction } from "./_generated/server";
+import { getInfoByAccessToken } from "./user";
 
 const http = httpRouter();
 
@@ -15,6 +16,13 @@ http.route({
   method: "POST",
   handler: payment,
 });
+
+http.route({
+  path: "/user/getByAccessToken",
+  method: "GET",
+  handler: getInfoByAccessToken,
+});
+
 // Обработка preflight OPTIONS-запроса
 http.route({
   path: "/payment",
@@ -39,4 +47,5 @@ http.route({
     }
   }),
 });
+
 export default http;
