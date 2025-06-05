@@ -15,12 +15,6 @@ import { notifications } from '@mantine/notifications';
 import { Tabs } from '@mantine/core';
 import { useRouter } from "next/navigation";
 
-interface User {
-    _id: Id<"users">;
-    account: string;
-    balance: number;
-}
-
 interface Target {
     _id: Id<"targets">;
     name: string;
