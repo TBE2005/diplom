@@ -69,7 +69,7 @@ export const payment = httpAction(async (ctx, request) => {
 
         const requestData = await responsePayment.json();
         if (requestData.status === "refused") {
-            throw new Error(requestData);
+            throw new Error(requestData.error);
         }
         const requestParamsProcess = new URLSearchParams({
             request_id: requestData.request_id,
@@ -84,7 +84,7 @@ export const payment = httpAction(async (ctx, request) => {
         });
         const processData = await responseProcess.json();
         if (processData.status === "refused") {
-            throw new Error(processData);
+            throw new Error(processData.error);
         }
 
         return new Response(JSON.stringify(processData), {
