@@ -52,7 +52,7 @@ export const payment = httpAction(async (ctx, request) => {
     const requestParams = new URLSearchParams({
         pattern_id: "p2p",
         to: targetAccount,
-        amount_due: amount.toFixed(2),
+        amount: amount.toFixed(2),
         comment: comment || "",
         message: comment || "",
     });
@@ -69,7 +69,7 @@ export const payment = httpAction(async (ctx, request) => {
 
         const requestData = await responsePayment.json();
         if (requestData.status === "refused") {
-            throw new Error(requestData.error);
+            throw new Error(requestData);
         }
         const requestParamsProcess = new URLSearchParams({
             request_id: requestData.request_id,
@@ -84,7 +84,7 @@ export const payment = httpAction(async (ctx, request) => {
         });
         const processData = await responseProcess.json();
         if (processData.status === "refused") {
-            throw new Error(processData.error);
+            throw new Error(processData);
         }
 
         return new Response(JSON.stringify(processData), {

@@ -187,7 +187,7 @@ function GoalCard(initialValues: Doc<"targets"> & { alerts: Doc<"alerts">[], goa
             <SimpleGrid cols={2} mt="md">
                 <TextInput key={form.key('name')} {...form.getInputProps('name')} />
                 <ActionIcon.Group ml="auto">
-                    <CopyButton value="https://mantine.dev" timeout={2000}>
+                    <CopyButton value={`https://diplom-liard-three.vercel.app/${initialValues._id}/goal`} timeout={2000}>
                         {({ copied, copy }) => (
                             <Tooltip label={copied ? 'Скопировано' : 'Скопировать ссылку на виджет сбора'} withArrow position="right">
                                 <ActionIcon size={"lg"} variant="light" color={copied ? 'teal' : ''} onClick={copy}>
@@ -196,7 +196,7 @@ function GoalCard(initialValues: Doc<"targets"> & { alerts: Doc<"alerts">[], goa
                             </Tooltip>
                         )}
                     </CopyButton>
-                    <CopyButton value="https://mantine.dev" timeout={2000}>
+                    <CopyButton value={`https://diplom-liard-three.vercel.app/${initialValues._id}/alert`} timeout={2000}>
                         {({ copied, copy }) => (
                             <Tooltip label={copied ? 'Скопировано' : 'Скопировать ссылку на виджет оповещения'} withArrow position="right">
                                 <ActionIcon size={"lg"} variant="light" color={copied ? 'teal' : ''} onClick={copy}>
