@@ -13,7 +13,7 @@ import { api } from "../../../convex/_generated/api";
 import { Doc, Id } from "../../../convex/_generated/dataModel";
 import { notifications } from '@mantine/notifications';
 import { Tabs } from '@mantine/core';
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Target {
     _id: Id<"targets">;
@@ -27,7 +27,6 @@ interface Target {
 
 
 export default function Page() {
-    const router = useRouter();
     const targets = useQuery(api.target.byUserId, {
         userId: localStorage.getItem("user_id") as Id<"users">
     });
@@ -71,7 +70,7 @@ export default function Page() {
 
                         return (
                             <Grid.Col span={{ base: 12, sm: 6, md: 4 }} key={target._id}>
-                                <Card shadow="sm" padding="lg" radius="md" withBorder onClick={() => router.push(`/${target._id}`)} style={{ cursor: 'pointer' }}>
+                                <Card shadow="sm" padding="lg" radius="md" withBorder>
                                     <Card.Section withBorder inheritPadding py="xs">
                                         <Group justify="space-between">
                                             <Text fw={500}>{target.name}</Text>
@@ -89,7 +88,7 @@ export default function Page() {
 
                                     <Progress value={progress} size="md" radius="xl" />
 
-                                    <Button variant="light" color="blue" fullWidth mt="md" radius="md" onClick={() => router.push(`/${target._id}`)}>
+                                    <Button component={Link} href={`/${target._id}`} variant="light" color="blue" fullWidth mt="md" radius="md" >
                                         Пожертвовать
                                     </Button>
                                 </Card>
