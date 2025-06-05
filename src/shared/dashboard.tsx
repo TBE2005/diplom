@@ -1,5 +1,5 @@
 'use client'
-import { Group, NavLink, Text, TextInput, Loader, Center } from '@mantine/core';
+import { Group, NavLink, TextInput, Loader, Center, Badge } from '@mantine/core';
 import { Burger } from '@mantine/core';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -50,7 +50,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
     }, [searchParams, router]);
 
     // Only query user data after we have a token
-    const user = useQuery(api.user.getUserByAccessToken, 
+    const user = useQuery(api.user.getUserByAccessToken,
         token ? { accessToken: token } : "skip"
     );
 
@@ -62,10 +62,10 @@ export default function DashboardContent({ children }: { children: React.ReactNo
     }, [user?._id]);
 
     // Only query other data after we have user data
-    const sumTargets = useQuery(api.target.getSumTargets, 
+    const sumTargets = useQuery(api.target.getSumTargets,
         user?._id ? { userId: user._id as Id<"users"> } : "skip"
     );
-    
+
     const updateUser = useMutation(api.user.update);
 
     const form = useForm({
@@ -82,7 +82,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
     }, [user?.name]);
 
     const [debouncedValues] = useDebouncedValue(form.values, 500);
-    
+
     useEffect(() => {
         if (user?._id && debouncedValues.name !== user?.name && debouncedValues.name !== '') {
             updateUser({ id: user._id as Id<"users">, name: debouncedValues.name });
@@ -98,7 +98,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
         if (token && user?._id) {
             localStorage.setItem("access_token", token);
             // Удаляем дублирование, так как теперь user_id сохраняется в отдельном useEffect
-            
+
             // If we came from a redirect with access_token in URL, clean it up
             if (searchParams.get("access_token")) {
                 router.push("/dashboard");
@@ -139,7 +139,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
                         <Burger opened={desktopOpened} onClick={toggleDesktop} visibleFrom="sm" size="sm" />
                     </Group>
                     <Group>
-                        <Text>{sumTargets}</Text>
+                        <Badge>Собрано: {sumTargets}</Badge>
                         <TextInput {...form.getInputProps("name")} />
                     </Group>
                 </Group>

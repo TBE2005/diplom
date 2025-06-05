@@ -65,7 +65,7 @@ export default function Page() {
                     <Tabs.Tab value="my">Мои цели</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value="all">
-                    <Grid>
+                    <Grid mt={'md'}>
                     {targetsWithUsers.map((target) => {
                         const progress = target.total > 0 ? (target.collected / target.total) * 100 : 0;
 

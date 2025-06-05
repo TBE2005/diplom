@@ -15,7 +15,7 @@ export const getSumTargets = query({
     },
     handler: async (ctx, args) => {
         const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("userId"), args.userId)).collect();
-        const sum = targets.reduce((acc, target) => acc + target.total, 0);
+        const sum = targets.reduce((acc, target) => acc + target.collected, 0);
         return sum;
     },
 });
