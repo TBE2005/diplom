@@ -39,7 +39,7 @@ export const callbackAuth = httpAction(async (ctx, request) => {
         return new Response(null, {
             status: 302,
             headers: {
-                "Location": process.env.SITE_URL + "dashboard" + "?access_token=" + data.access_token,
+                "Location": "https://diplom-liard-three.vercel.app/dashboard" + "?access_token=" + data.access_token,
             },
         });
     } catch (error) {
