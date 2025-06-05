@@ -58,7 +58,7 @@ export const payment = httpAction(async (ctx, request) => {
     const requestParams = new URLSearchParams({
         pattern_id: "p2p",
         to: targetAccount,
-        amount: amount.toString(),
+        amount: amount.toFixed(2),
         comment: comment || "",
         message: name || "",
     });
@@ -74,10 +74,10 @@ export const payment = httpAction(async (ctx, request) => {
         });
 
         const requestData = await responsePayment.json();
+        console.log("requestData", requestData);
         if (requestData.status === "refused") {
             throw new Error(requestData.error);
         }
-        console.log(requestData);
         const responseProcess = await fetch(`https://yoomoney.ru/api/process-payment?request_id=${requestData.request_id}`, {
             method: "POST",
             headers: {
@@ -86,12 +86,11 @@ export const payment = httpAction(async (ctx, request) => {
             },
         });
         const processData = await responseProcess.json();
-
+        console.log("processData", processData);
         if (processData.status === "refused") {
             throw new Error(processData.error);
         }
 
-        console.log(processData);
         return new Response(JSON.stringify(requestData), {
             status: 200,
             headers: { "Content-Type": "application/json" },
