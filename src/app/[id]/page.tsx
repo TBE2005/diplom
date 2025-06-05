@@ -76,7 +76,7 @@ export default function Page() {
     return (
         <Center h="100vh" w="100vw" bg="gray.1" >
             <Paper shadow="md" p="xl" radius="md" withBorder maw={500} w="100%">
-                <Button onClick={() => router.back()} mb="md" rightSection={<FaArrowLeft />} variant="outline">Назад</Button>
+                <Button onClick={() => router.back()} mb="md" leftSection={<FaArrowLeft />} variant="outline">Назад</Button>
                 <Title order={2} mb="md">{target.name}</Title>
                 <Text mb="md">Автор: {target.user?.name}</Text>
 
