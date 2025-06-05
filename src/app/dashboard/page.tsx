@@ -59,7 +59,7 @@ export default function Page() {
             <Button onClick={() => createTarget({
                 userId: localStorage.getItem("user_id") as Id<"users">
             })}>Новая цель</Button>
-            <Tabs defaultValue="all">
+            <Tabs defaultValue="all" mt={'md'}>
                 <Tabs.List>
                     <Tabs.Tab value="all">Все цели</Tabs.Tab>
                     <Tabs.Tab value="my">Мои цели</Tabs.Tab>
