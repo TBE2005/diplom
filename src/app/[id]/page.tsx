@@ -33,11 +33,8 @@ export default function Page() {
         try {
             const accessToken = localStorage.getItem("access_token") as string;
 
-            const userInfo = await fetch("https://sleek-barracuda-414.convex.site/user/getByAccessToken", {
+            const userInfo = await fetch(`https://sleek-barracuda-414.convex.site/user/getByAccessToken?access_token=${user.access_token}`, {
                 method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${user.access_token}`
-                }
             });
             const userInfoData = await userInfo.json();
 
