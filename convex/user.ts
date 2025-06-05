@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { httpAction, mutation, query } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
+import { api } from "./_generated/api";
 
 export const create = mutation({
     args: {
@@ -43,8 +44,12 @@ export const getInfoByAccessToken = httpAction(async (ctx, request) => {
         },
     });
     const user = await response.json();
-    if (user?._id) {
-        return new Response(JSON.stringify(user), { status: 200, headers: { "Content-Type": "application/json" } });
+    const userData = await ctx.runQuery(api.user.getUserByAccessToken, { accessToken: accessToken as string });
+    if (userData?._id) {
+        return new Response(JSON.stringify({
+            ...user,
+            ...userData,
+        }), { status: 200, headers: { "Content-Type": "application/json" } });
     }
     return new Response(JSON.stringify({ error: "User not found" }), { status: 404 });
 });
@@ -56,5 +61,15 @@ export const getUserByTargetId = query({
     handler: async (ctx, args) => {
         const target = await ctx.db.get(args.targetId);
         return await ctx.db.get(target?.userId as Id<"users">);
+    },
+});
+
+
+export const getUserByAccessToken = query({
+    args: {
+        accessToken: v.string(),
+    },
+    handler: async (ctx, args) => {
+        return await ctx.db.query("users").filter(q => q.eq(q.field("access_token"), args.accessToken)).first();
     },
 });
