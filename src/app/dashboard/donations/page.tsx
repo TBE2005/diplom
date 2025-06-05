@@ -29,7 +29,7 @@ export default function Page() {
                     <Tabs.Tab value="from">Отправленные</Tabs.Tab>
                     <Tabs.Tab value="to">Полученные</Tabs.Tab>
                 </Tabs.List>
-                <Tabs.Panel value="from">
+                <Tabs.Panel value="from" mt="md">
                     <Stack gap="md">
                         {myDonations?.map(donation => (
                             <Card key={donation._id} withBorder shadow="sm" radius="md" p="md" w="100%">
@@ -54,7 +54,7 @@ export default function Page() {
                         ))}
                     </Stack>
                 </Tabs.Panel>
-                <Tabs.Panel value="to">
+                <Tabs.Panel value="to" mt="md">
                     {myDonationsTo?.map(donation => (
                         <Card key={donation._id} withBorder shadow="sm" radius="md" p="md" w="100%">
                             <Group justify="space-between" mb="xs">
