@@ -85,7 +85,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
 
     useEffect(() => {
         if (user?._id && debouncedValues.name !== user?.name && debouncedValues.name !== '') {
-            updateUser({ id: user._id as Id<"users">, name: debouncedValues.name });
+            updateUser({ id: user._id as Id<"users">, name: debouncedValues.name, access_token: token as string });
             notifications.show({
                 title: "Успешно",
                 message: "Имя обновлено",

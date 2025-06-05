@@ -19,8 +19,8 @@ export const create = mutation({
 export const update = mutation({
     args: {
         id: v.id("users"),
-        access_token: v.optional(v.string()),
-        name: v.optional(v.string()),
+        access_token: v.string(),
+        name: v.string(),
     },
     handler: async (ctx, args) => {
         await ctx.db.patch(args.id, { access_token: args.access_token, name: args.name });

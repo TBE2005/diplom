@@ -25,6 +25,7 @@ export const callbackAuth = httpAction(async (ctx, request) => {
             await ctx.runMutation(api.user.update, {
                 id: userData._id,
                 access_token: data.access_token,
+                name: userData.name,
             });
         }
 
