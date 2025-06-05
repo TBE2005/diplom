@@ -32,7 +32,7 @@ export default function Page() {
     const payment = async (values: typeof form.values) => {
         try {
             const accessToken = localStorage.getItem("access_token") as string;
-            
+
             // Вызываем server action для обработки платежа
             const result = await processPayment(
                 target.user?.account as string,
@@ -41,11 +41,7 @@ export default function Page() {
                 values.name,
                 accessToken
             );
-            
-            if (!result.success) {
-                throw new Error(result.error);
-            }
-            
+
             await createDonation({
                 amount: values.amount,
                 message: values.message,
@@ -53,7 +49,7 @@ export default function Page() {
                 userId: user._id,
                 name: values.name,
             });
-            
+
             form.reset();
             notifications.show({
                 title: "Успешно",
@@ -61,15 +57,15 @@ export default function Page() {
                 color: "green",
             });
         } catch (error) {
+            console.error("Payment error details:", error);
             notifications.show({
                 title: "Ошибка",
                 message: error instanceof Error ? error.message : "Донат не отправлен",
                 color: "red",
             });
-            console.error(error);
         }
     }
-    
+
     const progress = target.total && target.collected && target.total > 0 ? (target.collected / target.total) * 100 : 0;
 
     return (
