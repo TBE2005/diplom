@@ -37,12 +37,12 @@ export default function Page() {
             const latestDonation = [...donations]
                 .reverse()
                 .find(donation => donation.alert && donation._id !== lastProcessedId.current);
-                
+
             if (latestDonation) {
                 lastProcessedId.current = latestDonation._id;
                 setCurrentAlert(latestDonation);
                 setIsShowingAlert(true);
-                
+
                 // Hide the alert after showing it
                 const alertDuration = 5000; // 5 seconds per alert
                 setTimeout(() => {
@@ -55,7 +55,6 @@ export default function Page() {
     // Empty state when no alerts are showing
     if (!isShowingAlert || !currentAlert || !currentAlert.alert) {
         return <Center h="100vh" w="100vw">
-            <Text>No alerts</Text>
         </Center>;
     }
 
