@@ -85,3 +85,14 @@ export const byUserId = query({
     },
 });
 
+export const getWithGoal = query({
+    args: {
+        targetId: v.id("targets"),
+    },
+    handler: async (ctx, args) => {
+        const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("_id"), args.targetId)).first();
+        const goals = await ctx.db.query("goals").filter(q => q.eq(q.field("_id"), targets?.goalId)).first();
+        return { ...targets, goal: goals };
+    },
+});
+

@@ -56,3 +56,49 @@ export const getMyDonationsTo = query({
         }));
     },
 });
+
+
+export const getDonationToLastWithAlert = query({
+    args: {
+        targetId: v.id("targets"),
+    },
+    handler: async (ctx, args) => {
+        const donations = await ctx.db.query("donations").filter(q => q.eq(q.field("targetId"), args.targetId)).collect();
+        const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("_id"), args.targetId)).first();
+        const alerts = await ctx.db.query("alerts").filter(q => q.eq(q.field("_id"), targets?.alertId)).first();
+        const users = await ctx.db.query("users").collect();
+        return {
+            ...donations[donations.length - 1],
+            fromUser: users.find(user => user._id === donations[donations.length - 1].fromUserId),
+            alert: alerts,
+        };
+    },
+});
+
+export const getDonationsForTarget = query({
+    args: {
+        targetId: v.id("targets"),
+    },
+    handler: async (ctx, args) => {
+        const donations = await ctx.db.query("donations")
+            .filter(q => q.eq(q.field("targetId"), args.targetId))
+            .order("desc")
+            .collect();
+        
+        if (donations.length === 0) return [];
+        
+        const target = await ctx.db.get(args.targetId);
+        let alert = null;
+        if (target?.alertId) {
+            alert = await ctx.db.get(target.alertId);
+        }
+        
+        const users = await ctx.db.query("users").collect();
+        
+        return donations.map(donation => ({
+            ...donation,
+            fromUser: users.find(user => user._id === donation.fromUserId),
+            alert: alert,
+        }));
+    },
+});

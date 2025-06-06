@@ -11,6 +11,15 @@ export const byUserId = query({
     },
 });
 
+export const getGoal = query({
+    args: {
+        id: v.id("goals"),
+    },
+    handler: async (ctx, args) => {
+        return await ctx.db.query("goals").filter(q => q.eq(q.field("_id"), args.id)).first();
+    },
+});
+
 export const create = mutation({
     args: {
         userId: v.id("users"),
