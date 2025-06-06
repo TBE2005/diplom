@@ -90,9 +90,9 @@ export const getWithGoal = query({
         targetId: v.id("targets"),
     },
     handler: async (ctx, args) => {
-        const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("_id"), args.targetId)).first();
-        const goals = await ctx.db.query("goals").filter(q => q.eq(q.field("_id"), targets?.goalId)).first();
-        return { ...targets, goal: goals };
+        const target = await ctx.db.query("targets").filter(q => q.eq(q.field("_id"), args.targetId)).first();
+        const goal = await ctx.db.query("goals").filter(q => q.eq(q.field("_id"), target?.goalId)).first();
+        return { ...target, goal: goal };
     },
 });
 
