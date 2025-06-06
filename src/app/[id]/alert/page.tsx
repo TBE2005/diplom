@@ -1,7 +1,7 @@
 'use client'
 import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
-import { Id } from "../../../../convex/_generated/dataModel";
+import { Doc, Id } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
 import { AlertTemplate } from "@/components/alert-template";
 import { Center } from "@mantine/core";
@@ -9,8 +9,19 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
     const { id } = useParams();
-    const [queuedDonations, setQueuedDonations] = useState<any[]>([]);
-    const [currentDonation, setCurrentDonation] = useState<any | null>(null);
+    const [queuedDonations, setQueuedDonations] = useState<{
+        _id: Id<"donations">;
+        amount: number;
+        message: string;
+        fromUser: Doc<"users"> | undefined;
+        alert: Doc<"alerts"> | undefined;
+    }[]>([]);
+    const [currentDonation, setCurrentDonation] = useState<{
+        alert: Doc<"alerts"> | undefined;
+        fromUser: Doc<"users"> | undefined;
+        message: string;
+        amount: number;
+    } | null>(null);
     const [isDisplaying, setIsDisplaying] = useState(false);
 
     // Get donations for this target
@@ -20,8 +31,13 @@ export default function Page() {
 
     // Add new donations to the queue
     useEffect(() => {
-        if (donation && donation.alert && (!currentDonation || donation._id !== currentDonation._id)) {
-            setQueuedDonations(prev => [...prev, donation]);
+        if (donation && donation.alert && (!currentDonation || donation.alert._id !== currentDonation.alert?._id)) {
+            const donationWithUser = {
+                ...donation,
+                fromUser: donation.fromUser || undefined,
+                alert: donation.alert || undefined
+            };
+            setQueuedDonations(prev => [...prev, donationWithUser]);
         }
     }, [donation, currentDonation]);
 
@@ -50,12 +66,12 @@ export default function Page() {
     // Show the current alert or empty state
     return (
         <Center h="100vh" w="100vw">
-            {isDisplaying && currentDonation && currentDonation.alert ? (
+            {isDisplaying && donation ? (
                 <AlertTemplate
-                    {...currentDonation.alert}
-                    name={currentDonation.fromUser?.name || ""}
-                    message={currentDonation.message}
-                    amount={currentDonation.amount}
+                    {...donation.alert!}
+                    name={donation.fromUser?.name || ""} 
+                    message={donation.message}
+                    amount={donation.amount}
                 />
             ) : null}
         </Center>
