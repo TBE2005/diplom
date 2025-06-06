@@ -14,30 +14,22 @@ export const callbackAuth = httpAction(async (ctx, request) => {
         const data = await responseToken.json();
 
         const userInfo = await fetch("https://yoomoney.ru/api/account-info", {
-            method: "GET",
+            method: "POST",
             headers: {
                 "Authorization": `Bearer ${data.access_token}`,
             },
         });
         const userInfoData = await userInfo.json();
 
-        const user = await fetch("https://sleek-barracuda-414.convex.site/user/getByAccount?account=" + userInfoData.account, {
-            method: "GET",
+        const user = await ctx.runQuery(api.user.getUserByAccount, {
+            account: userInfoData.account,
         });
-        const userData = await user.json();
 
-        if (userData.error) {
+        if (!user) {
             await ctx.runMutation(api.user.create, {
-                account: userData.account,
-            });
-        } else {
-            await ctx.runMutation(api.user.update, {
-                id: userData._id,
-                name: userData.name,
-                account: userData.account,
+                account: userInfoData.account,
             });
         }
-
         // Set cookie using Set-Cookie header and redirect
         return new Response(null, {
             status: 302,
