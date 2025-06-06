@@ -4,16 +4,17 @@ import { useParams } from "next/navigation";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
 import { GoalTemplate } from "@/components/goal-template";
-import { Card, Center } from "@mantine/core";
+import { Card, Center, Text } from "@mantine/core";
 
 
 export default function Page() {
     const { id } = useParams();
 
     const target = useQuery(api.target.getWithGoal, { targetId: id as Id<"targets"> });
-    console.log(target);
     if (!target || !target.goal) {
-        return <Center h="100vh" w="100vw" bg="red" c="white">Goal not found</Center>
+        return <Center h="100vh" w="100vw">
+            <Text>Goal not found</Text>
+        </Center>
     }
     return (
         <Center h="100vh" w="100vw">
