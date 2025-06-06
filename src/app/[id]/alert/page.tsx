@@ -66,12 +66,12 @@ export default function Page() {
     // Show the current alert or empty state
     return (
         <Center h="100vh" w="100vw">
-            {isDisplaying && donation ? (
+            {isDisplaying && currentDonation ? (
                 <AlertTemplate
-                    {...donation.alert!}
-                    name={donation.fromUser?.name || ""} 
-                    message={donation.message}
-                    amount={donation.amount}
+                    {...currentDonation.alert!}
+                    name={currentDonation.fromUser?.name || ""} 
+                    message={currentDonation.message}
+                    amount={currentDonation.amount}
                 />
             ) : null}
         </Center>
