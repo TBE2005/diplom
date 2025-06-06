@@ -13,21 +13,28 @@ export const callbackAuth = httpAction(async (ctx, request) => {
         );
         const data = await responseToken.json();
 
-        const user = await fetch("https://sleek-barracuda-414.convex.site/user/getByAccessToken?access_token=" + data.access_token, {
+        const userInfo = await fetch("https://yoomoney.ru/api/account-info", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${data.access_token}`,
+            },
+        });
+        const userInfoData = await userInfo.json();
+
+        const user = await fetch("https://sleek-barracuda-414.convex.site/user/getByAccount?account=" + userInfoData.account, {
             method: "GET",
         });
         const userData = await user.json();
 
         if (userData.error) {
             await ctx.runMutation(api.user.create, {
-                access_token: data.access_token,
                 account: userData.account,
             });
         } else {
             await ctx.runMutation(api.user.update, {
                 id: userData._id,
-                access_token: data.access_token,
                 name: userData.name,
+                account: userData.account,
             });
         }
 

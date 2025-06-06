@@ -4,13 +4,11 @@ import { Id } from "./_generated/dataModel";
 
 export const create = mutation({
     args: {
-        access_token: v.string(),
         account: v.string(),
     },
     handler: async (ctx, args) => {
         const user = await ctx.db.insert("users", {
             name: "user",
-            access_token: args.access_token,
             account: args.account,
         });
         return user;
@@ -20,11 +18,11 @@ export const create = mutation({
 export const update = mutation({
     args: {
         id: v.id("users"),
-        access_token: v.string(),
         name: v.string(),
+        account: v.string(),
     },
     handler: async (ctx, args) => {
-        await ctx.db.patch(args.id, { access_token: args.access_token, name: args.name });
+        await ctx.db.patch(args.id, { name: args.name, account: args.account });
     },
 });
 

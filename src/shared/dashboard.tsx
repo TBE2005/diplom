@@ -23,7 +23,7 @@ const links = [
 
 export default function DashboardContent({ children }: { children: React.ReactNode }) {
     const searchParams = useSearchParams();
-    const [token, setToken] = useState<string | null>(null);
+    const [account, setAccount] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
@@ -32,15 +32,15 @@ export default function DashboardContent({ children }: { children: React.ReactNo
 
     // Get token from searchParams or localStorage
     useEffect(() => {
-        const accessToken = searchParams.get("access_token");
-        if (accessToken) {
-            setToken(accessToken);
+        const account = searchParams.get("account");
+        if (account) {
+            setAccount(account);
             // Если токен получен из URL, сохраняем его сразу
-            localStorage.setItem("access_token", accessToken);
+            localStorage.setItem("account", account);
         } else {
-            const storedToken = localStorage.getItem("access_token");
-            if (storedToken) {
-                setToken(storedToken);
+            const storedAccount = localStorage.getItem("account");
+            if (storedAccount) {
+                setAccount(storedAccount);
             } else {
                 // No token found, redirect to login
                 router.push("/");
@@ -50,8 +50,8 @@ export default function DashboardContent({ children }: { children: React.ReactNo
     }, [searchParams, router]);
 
     // Only query user data after we have a token
-    const user = useQuery(api.user.getUserByAccessToken,
-        token ? { accessToken: token } : "skip"
+    const user = useQuery(api.user.getUserByAccount,
+        account ? { account: account } : "skip"
     );
 
     // Сохраняем user_id в localStorage как только получим данные пользователя
@@ -85,7 +85,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
 
     useEffect(() => {
         if (user?._id && debouncedValues.name !== user?.name && debouncedValues.name !== '') {
-            updateUser({ id: user._id as Id<"users">, name: debouncedValues.name, access_token: token as string });
+            updateUser({ id: user._id as Id<"users">, name: debouncedValues.name, account: account as string });
             notifications.show({
                 title: "Успешно",
                 message: "Имя обновлено",
@@ -95,8 +95,8 @@ export default function DashboardContent({ children }: { children: React.ReactNo
     }, [debouncedValues, user]);
 
     useEffect(() => {
-        if (token && user?._id) {
-            localStorage.setItem("access_token", token);
+        if (account && user?._id) {
+            localStorage.setItem("account", account);
             // Удаляем дублирование, так как теперь user_id сохраняется в отдельном useEffect
 
             // If we came from a redirect with access_token in URL, clean it up
@@ -104,7 +104,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
                 router.push("/dashboard");
             }
         }
-    }, [token, user?._id, router, searchParams]);
+    }, [account, user?._id, router, searchParams]);
 
     if (isLoading) {
         return (
@@ -114,7 +114,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
         );
     }
 
-    if (!token || !user) {
+    if (!account || !user) {
         return (
             <Center style={{ height: '100vh' }}>
                 <Loader size="xl" />
