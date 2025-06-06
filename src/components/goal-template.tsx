@@ -1,10 +1,11 @@
-import { Flex, Progress, Text, Stack } from "@mantine/core";
-import { Doc } from "../../convex/_generated/dataModel";
+import { Flex, Text, Stack, Paper } from "@mantine/core";
+import { Doc, Id } from "../../convex/_generated/dataModel";
 
-export function GoalTemplate(settings: Doc<"goals"> & { collected: number, total: number, name: string }) {
+export function GoalTemplate(settings: Doc<"goals"> & { collected: number, total: number, name: string}) {
+    const progress = settings.collected / settings.total;
     return (
-        <Progress.Root bg={settings.backgroundColor} size={100}>
-            <Progress.Section value={35} color={settings.indicatorColor} />
+        <Paper bg={settings.backgroundColor} w={300} h={300} pos="relative">
+            <Paper w={`${progress * 100}%`} h={300} color={settings.indicatorColor} pos="absolute" top={0} left={0} />
             <Stack gap="xs" pos="absolute" top={0} left={0} right={0} bottom={0} justify="center" align="center">
                 <Text c={settings.textColor}>{settings.name}</Text>
                 <Flex align="center" gap="xs">
@@ -13,7 +14,7 @@ export function GoalTemplate(settings: Doc<"goals"> & { collected: number, total
                     <Text c={settings.textColor}>{settings.total}</Text>
                 </Flex>
             </Stack>
-        </Progress.Root>
+        </Paper>
     )
 
 }
