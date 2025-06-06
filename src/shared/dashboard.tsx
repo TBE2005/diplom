@@ -100,7 +100,7 @@ export default function DashboardContent({ children }: { children: React.ReactNo
             // Удаляем дублирование, так как теперь user_id сохраняется в отдельном useEffect
 
             // If we came from a redirect with access_token in URL, clean it up
-            if (searchParams.get("access_token")) {
+            if (searchParams.get("account")) {
                 router.push("/dashboard");
             }
         }
