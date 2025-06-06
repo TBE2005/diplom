@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { Id, Doc } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
 import { AlertTemplate } from "@/components/alert-template";
-import { Center, Text } from "@mantine/core";
+import { Center } from "@mantine/core";
 import { useEffect, useState, useRef } from "react";
 
 // Define the donation type with alert
