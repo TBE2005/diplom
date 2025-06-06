@@ -17,7 +17,7 @@ export default function Page() {
     }
     return (
         <Center h="100vh" w="100vw">
-            <Card bg="none" p={0} m={0} w={150}>
+            <Card bg="none" p={0} m={0} w={250}>
                 <GoalTemplate {...target.goal} collected={target.collected || 0} total={target.total || 0} name={target.name || ""} />
             </Card>
         </Center>
