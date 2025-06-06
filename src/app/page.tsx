@@ -1,4 +1,4 @@
-import { AppShell, Button, Container, Text, Title, Group, Stack, Card, SimpleGrid, ThemeIcon, rem, Image, Flex } from "@mantine/core";
+import { AppShell, Button, Container, Text, Title, Group, Stack, Card, SimpleGrid, ThemeIcon, rem, Flex } from "@mantine/core";
 import Link from "next/link";
 import { FaChartLine, FaDollarSign, FaMoneyBillWave, FaShieldAlt, FaUserFriends } from "react-icons/fa";
 
