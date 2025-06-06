@@ -1,7 +1,7 @@
 'use client'
 import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
-import { Id } from "../../../../convex/_generated/dataModel";
+import { Doc, Id } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
 import { AlertTemplate } from "@/components/alert-template";
 import { Center } from "@mantine/core";
@@ -9,9 +9,19 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
     const { id } = useParams();
-    const [alertQueue, setAlertQueue] = useState<any[]>([]);
-    const [currentAlert, setCurrentAlert] = useState<any | null>(null);
-    const [isShowingAlert, setIsShowingAlert] = useState(false);
+    const [alertQueue, setAlertQueue] = useState<{
+        alert: Doc<"alerts">;
+        name: string;
+        message: string;
+        amount: number;
+    }[]>([]);
+    const [currentAlert, setCurrentAlert] = useState<{
+        alert: Doc<"alerts">;
+        name: string;
+        message: string;
+        amount: number;
+    } | null>(null);
+    const [isShowingAlert, setIsShowingAlert] = useState<boolean>(false);
 
     const donation = useQuery(api.donation.getDonationToLastWithAlert, {
         targetId: id as Id<"targets">
