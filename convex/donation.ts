@@ -64,6 +64,7 @@ export const getDonationToLastWithAlert = query({
     },
     handler: async (ctx, args) => {
         const donations = await ctx.db.query("donations").filter(q => q.eq(q.field("targetId"), args.targetId)).collect();
+        if (donations.length === 0) return null;
         const targets = await ctx.db.query("targets").filter(q => q.eq(q.field("_id"), args.targetId)).first();
         const alerts = await ctx.db.query("alerts").filter(q => q.eq(q.field("_id"), targets?.alertId)).first();
         const users = await ctx.db.query("users").collect();
