@@ -21,53 +21,36 @@ interface DonationWithAlert {
 
 export default function Page() {
     const { id } = useParams();
-    const [alertQueue, setAlertQueue] = useState<DonationWithAlert[]>([]);
     const [currentAlert, setCurrentAlert] = useState<DonationWithAlert | null>(null);
     const [isShowingAlert, setIsShowingAlert] = useState(false);
-    const processedDonations = useRef<Set<string>>(new Set());
+    const lastProcessedId = useRef<string | null>(null);
 
     // Get donations for this target
     const donations = useQuery(api.donation.getDonationsForTarget, {
         targetId: id as Id<"targets">
     });
 
-    // Process new donations into the queue
+    // Process only the latest donation with an alert
     useEffect(() => {
         if (donations && donations.length > 0) {
-            // Filter only donations with alerts that aren't already processed
-            const newDonations = donations.filter(donation =>
-                donation.alert &&
-                !processedDonations.current.has(donation._id)
-            );
-
-            if (newDonations.length > 0) {
-                // Add to processed set
-                newDonations.forEach(donation => {
-                    processedDonations.current.add(donation._id);
-                });
-
-                // Add to queue
-                setAlertQueue(prev => [...prev, ...newDonations]);
+            // Find the latest donation with an alert
+            const latestDonation = [...donations]
+                .reverse()
+                .find(donation => donation.alert && donation._id !== lastProcessedId.current);
+                
+            if (latestDonation) {
+                lastProcessedId.current = latestDonation._id;
+                setCurrentAlert(latestDonation);
+                setIsShowingAlert(true);
+                
+                // Hide the alert after showing it
+                const alertDuration = 5000; // 5 seconds per alert
+                setTimeout(() => {
+                    setIsShowingAlert(false);
+                }, alertDuration);
             }
         }
     }, [donations]);
-
-    // Process the queue
-    useEffect(() => {
-        if (alertQueue.length > 0 && !isShowingAlert) {
-            // Take the first alert from the queue
-            const nextAlert = alertQueue[0];
-            setCurrentAlert(nextAlert);
-            setIsShowingAlert(true);
-
-            // Remove the alert from the queue after showing it
-            const alertDuration = 5000; // 5 seconds per alert
-            setTimeout(() => {
-                setIsShowingAlert(false);
-                setAlertQueue(prev => prev.slice(1));
-            }, alertDuration);
-        }
-    }, [alertQueue, isShowingAlert]);
 
     // Empty state when no alerts are showing
     if (!isShowingAlert || !currentAlert || !currentAlert.alert) {
