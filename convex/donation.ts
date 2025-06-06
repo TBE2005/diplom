@@ -75,30 +75,3 @@ export const getDonationToLastWithAlert = query({
     },
 });
 
-export const getDonationsForTarget = query({
-    args: {
-        targetId: v.id("targets"),
-    },
-    handler: async (ctx, args) => {
-        const donations = await ctx.db.query("donations")
-            .filter(q => q.eq(q.field("targetId"), args.targetId))
-            .order("desc")
-            .collect();
-        
-        if (donations.length === 0) return [];
-        
-        const target = await ctx.db.get(args.targetId);
-        let alert = null;
-        if (target?.alertId) {
-            alert = await ctx.db.get(target.alertId);
-        }
-        
-        const users = await ctx.db.query("users").collect();
-        
-        return donations.map(donation => ({
-            ...donation,
-            fromUser: users.find(user => user._id === donation.fromUserId),
-            alert: alert,
-        }));
-    },
-});

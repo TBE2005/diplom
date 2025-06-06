@@ -1,72 +1,63 @@
 'use client'
 import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
-import { Id, Doc } from "../../../../convex/_generated/dataModel";
+import { Id } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
 import { AlertTemplate } from "@/components/alert-template";
 import { Center } from "@mantine/core";
-import { useEffect, useState, useRef } from "react";
-
-// Define the donation type with alert
-interface DonationWithAlert {
-    _id: Id<"donations">;
-    amount: number;
-    message: string;
-    fromUser?: {
-        name: string;
-        _id: Id<"users">;
-    };
-    alert?: Doc<"alerts"> | null;
-}
+import { useEffect, useState } from "react";
 
 export default function Page() {
     const { id } = useParams();
-    const [currentAlert, setCurrentAlert] = useState<DonationWithAlert | null>(null);
-    const [isShowingAlert, setIsShowingAlert] = useState(false);
-    const lastProcessedId = useRef<string | null>(null);
+    const [queuedDonations, setQueuedDonations] = useState<any[]>([]);
+    const [currentDonation, setCurrentDonation] = useState<any | null>(null);
+    const [isDisplaying, setIsDisplaying] = useState(false);
 
     // Get donations for this target
-    const donations = useQuery(api.donation.getDonationsForTarget, {
+    const donation = useQuery(api.donation.getDonationToLastWithAlert, {
         targetId: id as Id<"targets">
     });
 
-    // Process only the latest donation with an alert
+    // Add new donations to the queue
     useEffect(() => {
-        if (donations && donations.length > 0) {
-            // Find the latest donation with an alert
-            const latestDonation = [...donations]
-                .reverse()
-                .find(donation => donation.alert && donation._id !== lastProcessedId.current);
-
-            if (latestDonation) {
-                lastProcessedId.current = latestDonation._id;
-                setCurrentAlert(latestDonation);
-                setIsShowingAlert(true);
-
-                // Hide the alert after showing it
-                const alertDuration = 5000; // 5 seconds per alert
-                setTimeout(() => {
-                    setIsShowingAlert(false);
-                }, alertDuration);
-            }
+        if (donation && donation.alert && (!currentDonation || donation._id !== currentDonation._id)) {
+            setQueuedDonations(prev => [...prev, donation]);
         }
-    }, [donations]);
+    }, [donation, currentDonation]);
 
-    // Empty state when no alerts are showing
-    if (!isShowingAlert || !currentAlert || !currentAlert.alert) {
-        return <Center h="100vh" w="100vw">
-        </Center>;
-    }
+    // Process the donation queue
+    useEffect(() => {
+        if (!isDisplaying && queuedDonations.length > 0) {
+            // Get the next donation from the queue
+            const nextDonation = queuedDonations[0];
+            const remainingDonations = queuedDonations.slice(1);
+            
+            // Display the donation
+            setCurrentDonation(nextDonation);
+            setQueuedDonations(remainingDonations);
+            setIsDisplaying(true);
+            
+            // Set a timeout to hide the donation after 5 seconds
+            const timer = setTimeout(() => {
+                setIsDisplaying(false);
+                setCurrentDonation(null);
+            }, 5000);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [queuedDonations, isDisplaying]);
 
-    // Show the current alert
+    // Show the current alert or empty state
     return (
         <Center h="100vh" w="100vw">
-            <AlertTemplate
-                {...currentAlert.alert}
-                name={currentAlert.fromUser?.name || ""}
-                message={currentAlert.message}
-                amount={currentAlert.amount}
-            />
+            {isDisplaying && currentDonation && currentDonation.alert ? (
+                <AlertTemplate
+                    {...currentDonation.alert}
+                    name={currentDonation.fromUser?.name || ""}
+                    message={currentDonation.message}
+                    amount={currentDonation.amount}
+                />
+            ) : null}
         </Center>
     );
 }
