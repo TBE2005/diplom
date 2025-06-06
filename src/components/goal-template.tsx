@@ -1,5 +1,5 @@
 import { Flex, Text, Stack, Paper } from "@mantine/core";
-import { Doc, Id } from "../../convex/_generated/dataModel";
+import { Doc } from "../../convex/_generated/dataModel";
 
 export function GoalTemplate(settings: Doc<"goals"> & { collected: number, total: number, name: string}) {
     const progress = settings.collected / settings.total;
