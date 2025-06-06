@@ -5,11 +5,13 @@ import { Id } from "./_generated/dataModel";
 export const create = mutation({
     args: {
         access_token: v.string(),
+        account: v.string(),
     },
     handler: async (ctx, args) => {
         const user = await ctx.db.insert("users", {
             name: "user",
             access_token: args.access_token,
+            account: args.account,
         });
         return user;
     },
@@ -45,11 +47,11 @@ export const getUserByTargetId = query({
 });
 
 
-export const getUserByAccessToken = query({
+export const getUserByAccount = query({
     args: {
-        accessToken: v.string(),
+        account: v.string(),
     },
     handler: async (ctx, args) => {
-        return await ctx.db.query("users").filter(q => q.eq(q.field("access_token"), args.accessToken)).first();
+        return await ctx.db.query("users").filter(q => q.eq(q.field("account"), args.account)).first();
     },
 });

@@ -30,7 +30,7 @@ http.route({
       },
     });
     const user = await response.json();
-    const userData = await ctx.runQuery(api.user.getUserByAccessToken, { accessToken: accessToken as string });
+    const userData = await ctx.runQuery(api.user.getUserByAccount, { account: user.account });
     if (userData?._id) {
       return new Response(JSON.stringify({
         ...user,
