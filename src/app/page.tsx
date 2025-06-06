@@ -1,6 +1,6 @@
 import { AppShell, Button, Container, Text, Title, Group, Stack, Card, SimpleGrid, ThemeIcon, rem, Flex } from "@mantine/core";
 import Link from "next/link";
-import { FaChartLine, FaDollarSign, FaMoneyBillWave, FaShieldAlt, FaUserFriends } from "react-icons/fa";
+import { FaChartLine, FaMoneyBillWave, FaRubleSign, FaShieldAlt, FaUserFriends } from "react-icons/fa";
 
 const clientId = "E69B1725E46F1E7855155A622D7952CF616D37C90D134955B4604150B175DF69"
 const redirectUri = "https://sleek-barracuda-414.convex.site/callback"
@@ -63,7 +63,7 @@ export default function Home() {
             </Group>
           </div>
           <div style={{ flex: 1, maxWidth: '500px' }}>
-            <FaDollarSign
+            <FaRubleSign
               size={500}
               color="blue"
             />
