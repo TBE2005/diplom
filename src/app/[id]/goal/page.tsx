@@ -11,6 +11,7 @@ export default function Page() {
     const { id } = useParams();
 
     const target = useQuery(api.target.getWithGoal, { targetId: id as Id<"targets"> });
+    console.log(target);
     if (!target || !target.goal) {
         return <Center h="100vh" w="100vw" bg="red" c="white">Goal not found</Center>
     }
