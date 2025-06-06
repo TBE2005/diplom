@@ -33,14 +33,18 @@ export default function DashboardContent({ children }: { children: React.ReactNo
     // Get token from searchParams or localStorage
     useEffect(() => {
         const account = searchParams.get("account");
-        if (account) {
+        const access_token = searchParams.get("access_token");
+        if (account && access_token) {
             setAccount(account);
             // Если токен получен из URL, сохраняем его сразу
             localStorage.setItem("account", account);
+            localStorage.setItem("access_token", access_token as string);
         } else {
             const storedAccount = localStorage.getItem("account");
-            if (storedAccount) {
+            const storedAccess_token = localStorage.getItem("access_token");
+            if (storedAccount && storedAccess_token) {
                 setAccount(storedAccount);
+                localStorage.setItem("access_token", storedAccess_token);
             } else {
                 // No token found, redirect to login
                 router.push("/");

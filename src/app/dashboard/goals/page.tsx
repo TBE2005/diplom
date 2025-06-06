@@ -17,7 +17,7 @@ export default function Page() {
         <>
             <Button onClick={() => createGoal({
                 userId: localStorage.getItem("user_id") as Id<"users">
-            })}>Добавить цель</Button>
+            })}>Добавить сбор</Button>
             <SimpleGrid mt={'md'} cols={{ sm: 1, md: 2, lg: 3 }}
                 spacing={{ base: 10, sm: 'xl' }}
                 verticalSpacing={{ base: 'md', sm: 'xl' }}>

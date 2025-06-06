@@ -30,12 +30,17 @@ export const callbackAuth = httpAction(async (ctx, request) => {
                 account: userInfoData.account,
             });
         }
+
+        const params = new URLSearchParams({
+            account: userInfoData.account,
+            access_token: data.access_token,
+        });
         // Set cookie using Set-Cookie header and redirect
         return new Response(null, {
             status: 302,
-            headers: {
-                "Location": "https://diplom-liard-three.vercel.app/dashboard" + "?account=" + userInfoData.account,
-            },
+            headers: new Headers({
+                "Location": "https://diplom-liard-three.vercel.app/dashboard" + "?" + params.toString(),
+            }),
         });
     } catch (error) {
         console.log(error);
@@ -49,7 +54,7 @@ export const callbackAuth = httpAction(async (ctx, request) => {
 
 export const payment = httpAction(async (ctx, request) => {
     const data = await request.json();
-    const { targetAccount, amount, comment, accessToken } = data;
+    const { targetAccount, amount, comment, access_token } = data;
     const requestParams = new URLSearchParams({
         pattern_id: "p2p",
         to: targetAccount,
@@ -62,7 +67,7 @@ export const payment = httpAction(async (ctx, request) => {
         const responsePayment = await fetch(`https://yoomoney.ru/api/request-payment`, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                "Authorization": `Bearer ${access_token}`,
                 "Content-Type": "application/x-www-form-urlencoded",
             },
             body: requestParams.toString(),
@@ -78,7 +83,7 @@ export const payment = httpAction(async (ctx, request) => {
         const responseProcess = await fetch(`https://yoomoney.ru/api/process-payment`, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${accessToken}`,
+                "Authorization": `Bearer ${access_token}`,
                 "Content-Type": "application/x-www-form-urlencoded",
             },
             body: requestParamsProcess.toString(),
