@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
 import { GoalTemplate } from "@/components/goal-template";
-import { Center } from "@mantine/core";
+import { Card, Center } from "@mantine/core";
 
 
 export default function Page() {
@@ -17,7 +17,9 @@ export default function Page() {
     }
     return (
         <Center h="100vh" w="100vw">
-            <GoalTemplate {...target.goal} collected={target.collected || 0} total={target.total || 0} name={target.name || ""} />
+            <Card bg="none" p={0} m={0} w={150}>
+                <GoalTemplate {...target.goal} collected={target.collected || 0} total={target.total || 0} name={target.name || ""} />
+            </Card>
         </Center>
 
     )
