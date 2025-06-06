@@ -1,3 +1,4 @@
+'use client'
 import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 import { Id } from "../../../../convex/_generated/dataModel";
