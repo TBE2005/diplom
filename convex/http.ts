@@ -35,9 +35,9 @@ http.route({
       return new Response(JSON.stringify({
         ...user,
         ...userData,
-      }), { status: 200, headers: new Headers({ "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://diplom-liard-three.vercel.app", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type, Authorization" }) });
+      }), { status: 200, headers: new Headers({ "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://diplom.u-hu.site", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type, Authorization" }) });
     }
-    return new Response(JSON.stringify({ error: "User not found" }), { status: 404, headers: new Headers({ "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://diplom-liard-three.vercel.app", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type, Authorization" }) });
+    return new Response(JSON.stringify({ error: "User not found" }), { status: 404, headers: new Headers({ "Content-Type": "application/json", "Access-Control-Allow-Origin": "https://diplom.u-hu.site", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type, Authorization" }) });
   }),
 });
 
@@ -54,7 +54,7 @@ http.route({
     ) {
       return new Response(null, {
         headers: new Headers({
-          "Access-Control-Allow-Origin": "https://diplom-liard-three.vercel.app",
+          "Access-Control-Allow-Origin": "https://diplom.u-hu.site",
           "Access-Control-Allow-Methods": "POST",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
           "Access-Control-Max-Age": "86400",
