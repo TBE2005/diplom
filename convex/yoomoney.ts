@@ -39,7 +39,7 @@ export const callbackAuth = httpAction(async (ctx, request) => {
         return new Response(null, {
             status: 302,
             headers: new Headers({
-                "Location": "https://diplom.u-hu.site/dashboard" + "?" + params.toString(),
+                "Location": "https://diplom-liard-three.vercel.app/dashboard" + "?" + params.toString(),
             }),
         });
     } catch (error) {
